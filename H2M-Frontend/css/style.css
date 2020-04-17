@@ -479,7 +479,7 @@ pre {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   margin-right: 100px;
-  margin-left: 100px; }
+  margin-left: 30px; }
 
 .no-gutters {
   margin-right: 0;
@@ -8666,7 +8666,7 @@ h1, h2, h3, h4, h5,
   z-index: 0;
   background: #fff;
   position: relative;
-  width: 100%;
+  width: 125%;
   margin-bottom: 20px;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
