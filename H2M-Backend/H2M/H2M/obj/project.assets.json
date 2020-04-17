@@ -12537,11 +12537,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\darawsheh\\source\\repos\\H2M\\H2M\\H2M.csproj",
+      "projectUniqueName": "C:\\Users\\darawsheh\\source\\repos\\health-hero-match\\H2M-Backend\\H2M\\H2M\\H2M.csproj",
       "projectName": "H2M",
-      "projectPath": "C:\\Users\\darawsheh\\source\\repos\\H2M\\H2M\\H2M.csproj",
+      "projectPath": "C:\\Users\\darawsheh\\source\\repos\\health-hero-match\\H2M-Backend\\H2M\\H2M\\H2M.csproj",
       "packagesPath": "C:\\Users\\darawsheh\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\darawsheh\\source\\repos\\H2M\\H2M\\obj\\",
+      "outputPath": "C:\\Users\\darawsheh\\source\\repos\\health-hero-match\\H2M-Backend\\H2M\\H2M\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
