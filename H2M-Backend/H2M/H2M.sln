@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.489
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H2M", "H2M\H2M.csproj", "{08021CE1-C8DD-4137-A02D-154A22F011D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08021CE1-C8DD-4137-A02D-154A22F011D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08021CE1-C8DD-4137-A02D-154A22F011D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08021CE1-C8DD-4137-A02D-154A22F011D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08021CE1-C8DD-4137-A02D-154A22F011D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1946E819-41BD-414B-9C6B-9E0E08D9A27A}
+	EndGlobalSection
+EndGlobal
