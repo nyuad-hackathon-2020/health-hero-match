@@ -34,7 +34,6 @@ namespace H2M.Controllers
                                 Data = "Incorrect email or password!"
                             };
                     }
-
                     AuthHelper.AuthObject authObj = AuthHelper.CreateToken(db, _user, _user.Role.Name);
                     return new Response()
                     {
@@ -49,17 +48,19 @@ namespace H2M.Controllers
             }
         }
         [Route("~/signup")]
-        public Response Signup([FromForm]string Email,[FromForm]string Password,[FromForm] string Gender,[FromForm] string Name, [FromForm] double? Longitude, [FromForm] double? Latitude, [FromForm] int? CountryId, [FromForm] int? CityId, [FromForm] int? RoleId)
+        public Response Signup([FromForm]string Email,[FromForm]string Password,[FromForm] string Gender,[FromForm] string Name, [FromForm] double? Longitude, [FromForm] double? Latitude, [FromForm] int? CountryId, [FromForm] int? CityId, [FromForm] int? RoleId,[FromForm] string SpecialitiesJson)
         {
             try
             {
                 using (var db=new H2MDbContext())
                 {
+                    
+                    var roleId = (RoleId ?? 0);
                     var newUser = new User()
                     {
                         Email = Email.Trim(),
                         Password = Password,
-                        RoleId = RoleId??0,
+                        RoleId = roleId,
                         DateCreated = DateTime.Now,
                         Gender = Gender,
                         Name = Name.Trim(),
@@ -70,6 +71,55 @@ namespace H2M.Controllers
                     };
                     db.SaveChanges();
                     var authObject = AuthHelper.CreateToken(db, newUser, newUser.Role.Name);
+                    List<Speciality> specs=null;
+                    if (!string.IsNullOrWhiteSpace(SpecialitiesJson))
+                    {
+                        specs = JsonConvert.DeserializeObject<List<Speciality>>(SpecialitiesJson);
+                    }
+                    if (roleId== 1)
+                    {
+                        var _hospital = new Hospital()
+                        {
+                            Id=newUser.Id,
+                            Latitude=Latitude,
+                            Longitude=Longitude
+                        };
+                        db.Hospital.Add(_hospital);
+                        db.SaveChanges();
+
+                    }else if (roleId == 2)
+                    {
+                        var _doctor = new Doctor()
+                        {
+                            DoctorId = newUser.Id.ToString()
+                        };
+                        specs.ForEach(s => _doctor.DoctorSpeciality.Add(new DoctorSpeciality()
+                        {
+                            Speciality=s,
+                            DoctorId=newUser.Id
+                        }));
+                        db.Doctor.Add(_doctor);
+                        db.SaveChanges();
+                    }
+                    else if(roleId==3)
+                    {
+                        var _nurse = new Nurse()
+                        {
+                            NurseId = newUser.Id.ToString()
+                        };
+                        specs.ForEach(s => _nurse.NurseSpeciality.Add(new NurseSpeciality()
+                        {
+                            Speciality = s,
+                            NurseId= newUser.Id
+                        }));
+                        db.Nurse.Add(_nurse);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        InternalErrorObj.Data = "Invalid Job";
+                        return InternalErrorObj;
+                    }
                     return new Response()
                     {
                         Code = (int)HttpStatusCode.OK,

@@ -42,6 +42,8 @@ namespace H2M.Models
         {
             modelBuilder.Entity<City>(entity =>
             {
+                entity.Property(e => e.Initals).HasMaxLength(2);
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);

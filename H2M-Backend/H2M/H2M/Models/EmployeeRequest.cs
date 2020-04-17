@@ -9,6 +9,7 @@ namespace H2M.Models
         public int UserId { get; set; }
         public DateTime Time { get; set; }
         public int RequestId { get; set; }
+        public int Status { get; set; }
 
         public HostpitalRequest Request { get; set; }
         public User User { get; set; }
