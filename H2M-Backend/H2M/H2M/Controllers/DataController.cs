@@ -66,7 +66,7 @@ namespace H2M.Controllers
             using (var db = new H2MDbContext())
             {
                 var employee = db.EmployeeRequest.Include(a => a.Request).Include(a => a.User).Where(a => a.Id==EmployeeRequestId).FirstOrDefault();
-                return 
+                return employee;
             }
         }
         [Route("~/apply")]
