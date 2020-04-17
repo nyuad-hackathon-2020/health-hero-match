@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
+using Newtonsoft.Json;
+using H2M.ViewModels;
 
 namespace H2M.Controllers
 {
@@ -51,6 +53,7 @@ namespace H2M.Controllers
                 return InternalErrorObj;
             }
         }
+        
         [Route("~/signup")]
         public Response Signup([FromForm]string Email,[FromForm]string Password,[FromForm] string Gender,[FromForm] string Name, [FromForm] double? Longitude, [FromForm] double? Latitude, [FromForm] int? CountryId, [FromForm] int? CityId, [FromForm] int? RoleId)
         {
@@ -88,30 +91,34 @@ namespace H2M.Controllers
 
         [Route("~/GetRequestsSorted")]
         [HttpPost]
-        public Response GetRequestsSorted([FromForm]string lang,[FromForm]string lat)
+        public Response GetRequestsSorted([FromForm]double lon, [FromForm]double lat, [FromForm]int docID)
         {
             using (var db = new H2MDbContext()){
+                
+                var specIDs = db.DoctorSpeciality.Where(doc => doc.DoctorId == docID).ToList();
+                List<int> specs = new List<int>();
 
-                var _hospitals = db.Hospital.ToList();
-                if (_hospitals.Count == 0)
+                foreach(DoctorSpeciality doc in specIDs)
                 {
-                    return new Response()
-                    {
-                        Code = (int)HttpStatusCode.OK,
-                        Data = "No Hospitals found"
-                    };
-
+                    specs.Add(doc.SpecialityId);
                 }
 
-                foreach (Hospital h in _hospitals)
+                //var spec = db.Doctor.Include(u => u.DoctorSpeciality).Where(d => d.DoctorId);
+                var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(h => h.Hospital.IdNavigation).Where(r => specs.Contains(r.SpecialityId));
+                List<RequestViewModel> result = new List<RequestViewModel>();
+                foreach (HostpitalRequest h in _hospitals)
                 {
-
+                    var distance = GetDistance(h.Hospital.Latitude.Value, h.Hospital.Longitude.Value, lat, lon);
+                    result.Add(new RequestViewModel{
+                        Request = h,
+                        Distance = distance
+                    });
                 }
 
                 return new Response()
                 {
                     Code = (int)HttpStatusCode.OK,
-                    Data = authObj
+                    Data = result
                 };
             }
         }
@@ -159,41 +166,56 @@ namespace H2M.Controllers
         }
 
         [Route("~/CheckPeak")]
-        [HttpPost]
-        public Response CheckPeak([FromForm] int HospitalID){
+        [HttpGet]
+        public async Task<Response> CheckPeak(int HospitalID){
             try
             {
                 bool isPeak = false;
                 using (var db = new H2MDbContext())
                 {
-                    var hospital = db.User.Include(h => h.City).Where(h => h.Id == HospitalID).FirstOrDefault();
-                    var city = hospital.City;
-                    //var init = d
+                    var hospital = db.User.Include(c => c.City).Where(h => h.Id == HospitalID).FirstOrDefault();
+                    var init = hospital.City.Initals;
+                    var result = await getData(init);
+                    var data = JsonConvert.DeserializeObject<List<Dictionary<String, dynamic>>>(result);
+                    //double percent = 0;
+                    double sum = 0;
+                    List<double> nums = new List<double>();
+                    nums.Add(0);
+                    for (int i = data.Count - 1; i >= Math.Max(data.Count - 4, 0); i--)
+                    {
+                        sum += data[i]["positive"] - data[i-1]["positive"];
+                        nums.Add(sum - nums[nums.Count - 1]);
+                    }
+
+                    sum /= Math.Min(data.Count, 4);
+                    
+                    for (int i= data.Count-1;i> data.Count - 4; i--)
+                    {
+
+                    }
 
                     return new Response()
                     {
                         Code = (int)HttpStatusCode.OK,
-                        Data = isPeak
+                        Data = sum
                     };
                 }
 
             }
             catch (Exception ex)
             {
-                throw new Exception("Server Error");
+                throw new Exception("Server Error " + ex.ToString());
             }
 
         }
-        private async void getData()
+        private async Task<string> getData(string initals)
         {
             //http://coronavirusapi.com/getTimeSeriesJson/NY
 
-            var uri = new Uri("http://www.example.com/");
+            var uri = new Uri("http://coronavirusapi.com/getTimeSeriesJson/" + initals);
             var hc = new HttpClient();
             var result = await hc.GetStringAsync(uri);
-
-
-
+            return result;
         }
 
     }
