@@ -8,12 +8,15 @@ using H2M.Models;
 using Newtonsoft.Json;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
+
 namespace H2M.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
+
         // GET: api/Auth/5
         Response InternalErrorObj= new Response() {Code = (int)HttpStatusCode.InternalServerError,Data = "Internal server error"};
         [Route("~/login")]
@@ -50,7 +53,7 @@ namespace H2M.Controllers
             }
         }
         [Route("~/signup")]
-        public Response Signup()
+        public void Signup()
         {
             try
             {
@@ -67,5 +70,116 @@ namespace H2M.Controllers
                 throw;
             }
         }
+
+        [Route("~/GetRequestsSorted")]
+        [HttpPost]
+        public Response GetRequestsSorted([FromForm]string lang,[FromForm]string lat)
+        {
+            using (var db = new H2MDbContext()){
+
+                var _hospitals = db.Hospital.ToList();
+                if (_hospitals.Count == 0)
+                {
+                    return new Response()
+                    {
+                        Code = (int)HttpStatusCode.OK,
+                        Data = "No Hospitals found"
+                    };
+
+                }
+
+                foreach (Hospital h in _hospitals)
+                {
+
+                }
+
+                return new Response()
+                {
+                    Code = (int)HttpStatusCode.OK,
+                    Data = authObj
+                };
+            }
+        }
+
+        private double GetDistance(double prmLat1, double prmLon1, double prmLat2, double prmLon2)
+        {
+            try
+            {
+                double theta = prmLon1 - prmLon2;
+                double dist = Math.Sin(deg2rad(prmLat1)) * Math.Sin(deg2rad(prmLat2)) + Math.Cos(deg2rad(prmLat1)) * Math.Cos(deg2rad(prmLat2)) * Math.Cos(deg2rad(theta));
+                dist = Math.Acos(dist);
+                dist = rad2deg(dist);
+                dist = dist * 60 * 1.1515;
+                dist = dist * 1.609344;
+                return Math.Round(dist, 2);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Server Error");
+            }
+        }
+
+        private double rad2deg(double prmRad)
+        {
+            try
+            {
+                return (prmRad / Math.PI * 180.0);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Server Error");
+            }
+        }
+
+        private double deg2rad(double prmdeg)
+        {
+            try
+            {
+                return (prmdeg * Math.PI / 180.0);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Server Error");
+            }
+        }
+
+        [Route("~/CheckPeak")]
+        [HttpPost]
+        public Response CheckPeak([FromForm] int HospitalID){
+            try
+            {
+                bool isPeak = false;
+                using (var db = new H2MDbContext())
+                {
+                    var hospital = db.User.Include(h => h.City).Where(h => h.Id == HospitalID).FirstOrDefault();
+                    var city = hospital.City;
+                    //var init = d
+
+                    return new Response()
+                    {
+                        Code = (int)HttpStatusCode.OK,
+                        Data = isPeak
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Server Error");
+            }
+
+        }
+        private async void getData()
+        {
+            //http://coronavirusapi.com/getTimeSeriesJson/NY
+
+            var uri = new Uri("http://www.example.com/");
+            var hc = new HttpClient();
+            var result = await hc.GetStringAsync(uri);
+
+
+
+        }
+
     }
 }
