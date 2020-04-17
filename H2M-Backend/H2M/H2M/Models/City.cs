@@ -15,6 +15,7 @@ namespace H2M.Models
         public string Name { get; set; }
         public double? Longitude { get; set; }
         public double? Latitude { get; set; }
+        public string Initals { get; set; }
 
         public ICollection<User> User { get; set; }
     }

@@ -36,15 +36,14 @@ namespace H2M.Controllers
                                 Code = (int)HttpStatusCode.Unauthorized,
                                 Data = "Incorrect email or password!"
                             };
-
                     }
 
                     AuthHelper.AuthObject authObj = AuthHelper.CreateToken(db, _user, _user.Role.Name);
                     return new Response()
-                        {
-                            Code = (int)HttpStatusCode.OK,
-                            Data = authObj
-                        };
+                    {
+                        Code = (int)HttpStatusCode.OK,
+                        Data = authObj
+                    };
                 }
             }
             catch (Exception ex)
@@ -53,7 +52,7 @@ namespace H2M.Controllers
             }
         }
         [Route("~/signup")]
-        public void Signup()
+        public Response Signup([FromForm]string Email,[FromForm]string Password,[FromForm] string Gender,[FromForm] string Name, [FromForm] double? Longitude, [FromForm] double? Latitude, [FromForm] int? CountryId, [FromForm] int? CityId, [FromForm] int? RoleId)
         {
             try
             {
@@ -61,13 +60,29 @@ namespace H2M.Controllers
                 {
                     var newUser = new User()
                     {
-                        
+                        Email = Email.Trim(),
+                        Password = Password,
+                        RoleId = RoleId??0,
+                        DateCreated = DateTime.Now,
+                        Gender = Gender,
+                        Name = Name.Trim(),
+                        CountryId=CountryId??-1,
+                        CityId=CityId??-1,
+                        Longitude=Longitude,
+                        Latitude=Latitude
+                    };
+                    db.SaveChanges();
+                    var authObject = AuthHelper.CreateToken(db, newUser, newUser.Role.Name);
+                    return new Response()
+                    {
+                        Code = (int)HttpStatusCode.OK,
+                        Data = authObject
                     };
                 }
             }
             catch (Exception ex)
             {
-                throw;
+                return InternalErrorObj;
             }
         }
 
