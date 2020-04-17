@@ -15,10 +15,10 @@ namespace H2M.Controllers
     public class AuthController : ControllerBase
     {
         // GET: api/Auth/5
-
-        [Route("~/login/{email}/{password}")]
-        [HttpGet(Name = "Get")]
-        public Response Get(string email, string password)
+        Response InternalErrorObj= new Response() {Code = (int)HttpStatusCode.InternalServerError,Data = "Internal server error"};
+        [Route("~/login")]
+        [HttpPost]
+        public Response Login([FromForm]string email, [FromForm] string password)
         {
             try
             {
@@ -46,12 +46,25 @@ namespace H2M.Controllers
             }
             catch (Exception ex)
             {
-                return new Response()
-                            {
-                                Code = (int)HttpStatusCode.InternalServerError,
-                                Data = "Internal server error"
-                            };
-
+                return InternalErrorObj;
+            }
+        }
+        [Route("~/signup")]
+        public Response Signup()
+        {
+            try
+            {
+                using (var db=new H2MDbContext())
+                {
+                    var newUser = new User()
+                    {
+                        
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }
