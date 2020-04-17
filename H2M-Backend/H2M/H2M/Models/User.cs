@@ -7,6 +7,7 @@ namespace H2M.Models
     {
         public User()
         {
+            EmployeeRequest = new HashSet<EmployeeRequest>();
             Tokens = new HashSet<Tokens>();
         }
 
@@ -28,6 +29,7 @@ namespace H2M.Models
         public Doctor Doctor { get; set; }
         public Hospital Hospital { get; set; }
         public Nurse Nurse { get; set; }
+        public ICollection<EmployeeRequest> EmployeeRequest { get; set; }
         public ICollection<Tokens> Tokens { get; set; }
     }
 }

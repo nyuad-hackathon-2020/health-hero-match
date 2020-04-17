@@ -19,7 +19,9 @@ namespace H2M.Models
         public virtual DbSet<Country> Country { get; set; }
         public virtual DbSet<Doctor> Doctor { get; set; }
         public virtual DbSet<DoctorSpeciality> DoctorSpeciality { get; set; }
+        public virtual DbSet<EmployeeRequest> EmployeeRequest { get; set; }
         public virtual DbSet<Hospital> Hospital { get; set; }
+        public virtual DbSet<HostpitalRequest> HostpitalRequest { get; set; }
         public virtual DbSet<Nurse> Nurse { get; set; }
         public virtual DbSet<NurseSpeciality> NurseSpeciality { get; set; }
         public virtual DbSet<Role> Role { get; set; }
@@ -40,8 +42,6 @@ namespace H2M.Models
         {
             modelBuilder.Entity<City>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);
@@ -86,6 +86,23 @@ namespace H2M.Models
                     .HasConstraintName("FK_DoctorSpeciality_Speciality");
             });
 
+            modelBuilder.Entity<EmployeeRequest>(entity =>
+            {
+                entity.Property(e => e.Time).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Request)
+                    .WithMany(p => p.EmployeeRequest)
+                    .HasForeignKey(d => d.RequestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeeRequest_HostpitalRequest");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.EmployeeRequest)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeeRequest_User");
+            });
+
             modelBuilder.Entity<Hospital>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -95,6 +112,25 @@ namespace H2M.Models
                     .HasForeignKey<Hospital>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Hospital_User");
+            });
+
+            modelBuilder.Entity<HostpitalRequest>(entity =>
+            {
+                entity.Property(e => e.Htmlpost)
+                    .HasColumnName("HTMLPost")
+                    .HasColumnType("text");
+
+                entity.HasOne(d => d.Hospital)
+                    .WithMany(p => p.HostpitalRequest)
+                    .HasForeignKey(d => d.HospitalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HostpitalRequest_Hospital");
+
+                entity.HasOne(d => d.Speciality)
+                    .WithMany(p => p.HostpitalRequest)
+                    .HasForeignKey(d => d.SpecialityId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HostpitalRequest_Speciality");
             });
 
             modelBuilder.Entity<Nurse>(entity =>

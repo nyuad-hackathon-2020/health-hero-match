@@ -8,6 +8,7 @@ namespace H2M.Models
         public Speciality()
         {
             DoctorSpeciality = new HashSet<DoctorSpeciality>();
+            HostpitalRequest = new HashSet<HostpitalRequest>();
             NurseSpeciality = new HashSet<NurseSpeciality>();
         }
 
@@ -16,6 +17,7 @@ namespace H2M.Models
         public int? Type { get; set; }
 
         public ICollection<DoctorSpeciality> DoctorSpeciality { get; set; }
+        public ICollection<HostpitalRequest> HostpitalRequest { get; set; }
         public ICollection<NurseSpeciality> NurseSpeciality { get; set; }
     }
 }
