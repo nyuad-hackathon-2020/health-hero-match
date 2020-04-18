@@ -152,9 +152,10 @@ namespace H2M.Controllers
                 {
                     specs.Add(doc.SpecialityId);
                 }
-
+                //return accepted
                 //var spec = db.Doctor.Include(u => u.DoctorSpeciality).Where(d => d.DoctorId);
-                var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(a=>a.Hospital.IdNavigation).Include(a => a.Hospital.IdNavigation.City).Include(a => a.Hospital.IdNavigation.Country).Include(h => h.Speciality).Where(r => specs.Contains(r.SpecialityId));
+                var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(a=>a.Hospital.IdNavigation).Include(a => a.Hospital.IdNavigation.City).Include(a => a.Hospital.IdNavigation.Country).Include(h => h.Speciality)
+                    .Where(r => specs.Contains(r.SpecialityId));
                 List<RequestViewModel> result = new List<RequestViewModel>();
                 User user = null;
                 if (lon == null || lat == null)
@@ -170,7 +171,7 @@ namespace H2M.Controllers
                     }
                     result.Add(new RequestViewModel
                     {
-                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id },//($speciality,$hospitalName,$count,$country,$hospitalAppId)
+                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id },
                         Distance = distance
                     });
                 }
@@ -196,7 +197,8 @@ namespace H2M.Controllers
                 {
 
                     var hospital = db.Hospital.Include(h => h.HostpitalRequest).Include(h => h.IdNavigation).Where(h => h.Id == ID);
-                    return new Response(){
+                    return new Response()
+                    {
                         Code = (int)HttpStatusCode.OK,
                         Data = hospital
                     };
@@ -207,9 +209,9 @@ namespace H2M.Controllers
                 return new Response()
                 {
                     Code = (int)HttpStatusCode.InternalServerError,
-                    Data = ex.ToString();
+                    Data = ex.ToString()
                 };
-
+            }
         }
 
         private double GetDistance(double prmLat1, double prmLon1, double prmLat2, double prmLon2)

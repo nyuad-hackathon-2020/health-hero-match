@@ -1,4 +1,5 @@
 <?php 
+$userId=2;
 function Head(){
     ?>
     <!DOCTYPE html>
@@ -23,10 +24,10 @@ function Head(){
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
 
-    
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/custom.css">
   </head>
   <body>
 <?php
@@ -44,11 +45,12 @@ function Navbar(){
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-	          <li class="nav-item"><a href="browsejobs.html" class="nav-link">Browse Requests</a></li>
+	          <li class="nav-item"><a href="browsejobs.html" class="nav-link">Browse Jobs</a></li>
 	          <li class="nav-item"><a href="candidates.html" class="nav-link">Canditates</a></li>
+	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
 	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta mr-md-1"><a href="new-post.html" class="nav-link">Post a Request</a></li>
-	          <li class="nav-item cta cta-colored"><a href="job-post.html" class="nav-link">Apply for demand</a></li>
+	          <li class="nav-item cta mr-md-1"><a href="new-post.html" class="nav-link">Post a Job</a></li>
+	          <li class="nav-item cta cta-colored"><a href="job-post.html" class="nav-link">Want a Job</a></li>
 
 	        </ul>
 	      </div>
@@ -130,7 +132,7 @@ function Footer(){
           <div class="col-md-12 text-center">
 
             <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright H2m &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
   <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
           </div>
         </div>
