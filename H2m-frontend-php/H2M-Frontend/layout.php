@@ -1,5 +1,7 @@
 <?php 
-function Head(){
+$userId=2;
+$hospitalId=3;
+function Head($added=true){
     ?>
     <!DOCTYPE html>
 <html lang="en">
@@ -8,48 +10,79 @@ function Head(){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&display=swap" rel="stylesheet">
-
     <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+
+<?php if($added){ 
+  ?>
+  <!--===============================================================================================-->	
+  <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+  <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+  <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+  <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+  <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+  <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="css/util.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+  <!--===============================================================================================-->
+ <?php 
+}
+?>
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
+    
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
+
     <link rel="stylesheet" href="css/aos.css">
+
     <link rel="stylesheet" href="css/ionicons.min.css">
+
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
+
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+
   </head>
   <body>
 <?php
 }
 
-function Navbar(){
+function Navbar($isHospital=false){
     ?>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container-fluid px-md-4	">
-	      <a class="navbar-brand" href="index.html"><img style="width: 450px;margin-left: -25px;" src="images/logo.png" ></a>
+	      <a class="navbar-brand" href="index.html"><img style="width: 450px;margin-left: -25px;" src="images/logo.png" /></a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span> Menu
 	      </button>
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="index.php" class="nav-link">Home</a></li>
-	          <li class="nav-item"><a href="HospitalD.php" class="nav-link">Browse Requests</a></li>
-	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta mr-md-1"><a href="new-post.html" class="nav-link">Add a Request</a></li>
-	          <li class="nav-item cta cta-colored"><a href="HospitalD.php" class="nav-link">Apply for Request</a></li>
+            <li class="nav-item active"><a href="index.php" class="nav-link">Home</a></li>
+            <?php if(!$isHospital){ ?>
+              <li class="nav-item"><a href="HospitalD.php" class="nav-link">Hospital Demands</a></li>
+              <li class="nav-item"><a href="profile.php" class="nav-link">My Profile</a></li>
+            <?php 
+            }
+            else{
+            ?>
+              <li class="nav-item"><a href="profile-hospital.php" class="nav-link">My Profile</a></li>
+              <li class="nav-item cta mr-md-1"><a href="newdemand.php" class="nav-link">Add a Request</a></li>
+            <?php 
+            }
+            ?>
+	          <li class="nav-item cta mr-md-1"><a href="new-post.html" class="nav-link">Logout</a></li>
+	          
 
 	        </ul>
 	      </div>
@@ -131,7 +164,7 @@ function Footer(){
           <div class="col-md-12 text-center">
 
             <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright H2m &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  Copyright H2M &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
   <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
           </div>
         </div>
@@ -142,7 +175,7 @@ function Footer(){
 
 function Scripts(){
     ?>
-  <script src="js/jquery.min.js"></script>
+      <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>

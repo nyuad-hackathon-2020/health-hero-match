@@ -3,8 +3,10 @@ require_once("layout.php");
 
 Head(false);
 
-Navbar();
+Navbar(true);
 
+$resp=file_get_contents("http://localhost:57984/specialities");
+$list=json_decode($resp);
 ?>
 <!-- write your html here -->
 <div class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
@@ -25,17 +27,18 @@ Navbar();
        
           <div class="col-md-12 col-lg-8 mb-5">
           
-			     <form action="#" class="p-5 bg-white">
+			     <form action="createDemand.php" method="post" class="p-5 bg-white">
+                     <input type="hidden" name="HospitalId" value="<?php echo $hospitalId ?>">
               <div class="row form-group mb-4">
                 <div class="col-md-12"><h3>Speciality</h3></div>
                 <div class="col-md-12 mb-3 mb-md-0">
-                <select name="speciality" class="form-control">
-                    <option value="1">Surgery</option>
-                    <option value="">Full Time</option>
-                    <option value="">Part Time</option>
-                    <option value="">Freelance</option>
-                    <option value="">Internship</option>
-                    <option value="">Temporary</option>
+                <select name="SpecialityId" class="form-control">
+                    <?php foreach ($list as $opt) {
+?> 
+                <option value="<?php echo $opt->id?>"><?php echo $opt->name?></option>
+
+<?php 
+}?>
                 </select>
                 </div>
               </div>
@@ -51,7 +54,7 @@ Navbar();
               <div class="row form-group">
                 <div class="col-md-12"><h3>Demand Post</h3></div>
                 <div class="col-md-12 mb-3 mb-md-0">
-                  <textarea name="" class="form-control" id="" cols="30" rows="5"></textarea>
+                  <textarea name="editor" class="form-control" id="" cols="30" rows="5"></textarea>
                 </div>
               </div>
 
@@ -88,6 +91,10 @@ Navbar();
         </div>
       </div>
     </section>
+    <script>
+                                CKEDITOR.replace( 'editor' );
+
+    </script>
 <?php
     Footer();
     Scripts();

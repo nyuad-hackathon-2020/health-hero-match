@@ -5,7 +5,7 @@ include("APIs.php");
 
 Head();
 
-Navbar();
+Navbar(true);
 
 $message = '
 ';

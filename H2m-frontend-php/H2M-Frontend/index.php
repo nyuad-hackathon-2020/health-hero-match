@@ -68,7 +68,7 @@ Navbar();
     				<div class="category-wrap">
     					<div class="row no-gutters">
 							<div class="col-md-2">
-								<a href="#">
+								<a href="profile-hospital.php">
 									<div class="top-category text-center no-border-left">
 										<h3>Request</h3>
 										<span class="icon flaticon-contact"></span>
@@ -78,7 +78,7 @@ Navbar();
 								</div>
 							
 								<div class="col-md-2">
-								<a href="#">
+								<a href="hospitald.php">
 									<div class="top-category text-center">
 										<h3>Apply</h3>
 										<span class="icon flaticon-stethoscope"></span>
