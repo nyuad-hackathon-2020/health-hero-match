@@ -210,7 +210,6 @@ namespace H2M.Controllers
                     Data = ex.ToString();
                 };
 
-            }
         }
 
         private double GetDistance(double prmLat1, double prmLon1, double prmLat2, double prmLon2)
