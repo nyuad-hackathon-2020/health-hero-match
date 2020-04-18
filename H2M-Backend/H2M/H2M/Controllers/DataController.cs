@@ -62,6 +62,7 @@ namespace H2M.Controllers
                 return new { userInfo, specialtiesList };
             }
         }
+
         [Route("~/ApplicationHospital")]
         [HttpGet]
         public dynamic ApplicationHospital(int RequestId)

@@ -189,18 +189,29 @@ namespace H2M.Controllers
 
         public Response GetHospital(int ID)
         {
-
             try
             {
-
                 using (var db = new H2MDbContext())
                 {
 
-                    var hospital = db.Hospital.Include(h => h.HostpitalRequest).Include(h => h.IdNavigation).Where(h => h.Id == ID);
+                    var hospitalInfo = db.User.Where(h => h.Id == ID).Select(a => new { a.Email, a.Name, City = a.City.Name, Country = a.Country.Name}).FirstOrDefault();
+
+                    var requests = db.HostpitalRequest.Where(r => r.HospitalId == ID).Select(a => new { a.Id, a.Speciality, a.Enabled, a.Count}).ToList();
+                    List<int> ids = new List<int>();
+                    foreach(var r in requests)
+                    {
+                        ids.Add(r.Id);
+                    }
+
+                    var newRequests = db.EmployeeRequest.Where(r => ids.Contains(r.RequestId)).Select(r => new { r.User, r.Status, r.Time, r.Request.Speciality}).ToList();
+
+
+                    //var newReuests = db.EmployeeRequest.Where(r => r.);
+
                     return new Response()
                     {
                         Code = (int)HttpStatusCode.OK,
-                        Data = hospital
+                        Data = new {hospitalInfo, requests , newRequests }
                     };
                 }
             }
@@ -211,9 +222,10 @@ namespace H2M.Controllers
                     Code = (int)HttpStatusCode.InternalServerError,
                     Data = ex.ToString()
                 };
-            }
-        }
 
+            }
+
+        }
         private double GetDistance(double prmLat1, double prmLon1, double prmLat2, double prmLon2)
         {
             try
