@@ -23,7 +23,29 @@ namespace H2M.Controllers
                 return db.Country.ToList();
             }
         }
-
+        [Route("~/NewDemand")]
+        [HttpPost]
+        public Response NewDemand([FromForm]int HospitalId,[FromForm] int count,[FromForm]string htmlPost,[FromForm] int SpecialityId)
+        {
+            using (var db = new H2MDbContext())
+            {
+                var request = new HostpitalRequest
+                {
+                    Count = count,
+                    Htmlpost = htmlPost,
+                    HospitalId = HospitalId,
+                    SpecialityId = SpecialityId,
+                    Enabled=true
+                };
+                db.HostpitalRequest.Add(request);
+                db.SaveChanges();
+                return new Response()
+                {
+                    Code = (int)HttpStatusCode.OK,
+                    Data = "Demand added successfully!"
+                };
+            }
+        }
         [Route("~/ApplyList")]
         [HttpGet]
         public List<HostpitalRequest> ApplyList(int hospitalID)
@@ -72,14 +94,39 @@ namespace H2M.Controllers
                 return db.EmployeeRequest.Where(a => a.RequestId == RequestId&&a.Status!=0);
             }
         }
-        [Route("~/ApproveRejectApplications")]
+        [Route("~/AcceptRejectApplications")]
         [HttpGet]
-        public dynamic ApproveRejectApplications(int EmployeeRequestId)
+        public dynamic ApproveRejectApplications(int EmployeeRequestId,bool AcceptOrDecline)
         {
             using (var db = new H2MDbContext())
             {
-                var employee = db.EmployeeRequest.Include(a => a.Request).Include(a => a.User).Where(a => a.Id==EmployeeRequestId).FirstOrDefault();
-                return employee;
+                var employeeRequest = db.EmployeeRequest.Include(a => a.Request).Include(a => a.User).Where(a => a.Id==EmployeeRequestId).FirstOrDefault();
+                if (employeeRequest == null)
+                {
+                    return new Response()
+                    {
+                        Code = (int)HttpStatusCode.NotFound,
+                        Data = "Invalid Request"
+                    };
+                }
+                else
+                {
+                    var msg = "";
+                    var userInfo = db.User.Where(a => a.Id == employeeRequest.UserId).FirstOrDefault();
+                    if (AcceptOrDecline)
+                    {
+                        employeeRequest.Status = 1;
+                        msg = userInfo.Name+ " accepted Successfully!";
+
+                    }
+                    else
+                    {
+                        employeeRequest.Status = -1;
+                        msg = userInfo.Name+ " has been rejected.";
+                    }
+                    db.SaveChanges();
+                    return new Response() { Code = (int)HttpStatusCode.OK, Data = new { userInfo.Name, userInfo.Email, msg } };
+                }
             }
         }
         [Route("~/apply")]
@@ -90,15 +137,23 @@ namespace H2M.Controllers
             {
                 using (var db = new H2MDbContext())
                 {
-                    EmployeeRequest er = new EmployeeRequest()
+                    var HasApplied = db.EmployeeRequest.Where(a => a.UserId == EmployeeId && a.RequestId == RequestId).FirstOrDefault() != null;
+                    if (HasApplied)
                     {
-                        UserId = EmployeeId,
-                        Time = DateTime.Now,
-                        RequestId = RequestId,
-                        Status = 0
-                    };//0-> pending 1-> accepted -1-> rejected
-                    db.EmployeeRequest.Add(er);
-                    db.SaveChanges();
+                          return new Response() { Code = (int)HttpStatusCode.AlreadyReported, Data = "You've applied before!" };
+                    }
+                    else
+                    {
+                        EmployeeRequest er = new EmployeeRequest()
+                        {
+                            UserId = EmployeeId,
+                            Time = DateTime.Now,
+                            RequestId = RequestId,
+                            Status = 0
+                        };//0-> pending 1-> accepted -1-> rejected
+                        db.EmployeeRequest.Add(er);
+                        db.SaveChanges(); 
+                    }
                 }
                 return new Response() { Code = (int)HttpStatusCode.OK, Data = "Applied Successfully" };
             }

@@ -4,18 +4,19 @@ require_once("layout.php");
 Head();
 
 Navbar();
-function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospitalAppId){
+function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospitalAppId,$isApplied){
+	$url="HospitalApp.php?hospitalApp=$hospitalAppId&hospitalCityCountry=$city , $country"
     ?>
             <div class="col-md-12 ftco-animate fadeInUp ftco-animated">
                 <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
                     <div class="one-third mb-4 mb-md-0">
 		                <div class="job-post-item-header align-items-center">
 		                	<span class="subadge">Doctors</span>
-						  <h2 class="mr-3 text-black"><a href="#"><?php echo $speciality ?></a></h2>
-						 <h10 class="mr-3 text-black"><a href="#"><?php echo $hospitalName ?></a></h10>
+						  <h2 class="mr-3 text-black"><span ><?php echo $speciality ?></span></h2>
+						 <h10 class="mr-3 text-black"><span><?php echo $hospitalName ?></span></h10>
 		                </div>
 		                <div class="job-post-item-body d-block d-md-flex">
-		                  <div class="mr-3"><span class="icon-layers"></span> <a href="#"><?php echo $count ?></a></div>
+		                  <div class="mr-3"><span class="icon-layers"></span> <span><?php echo $count ?></span></div>
 		                  <div><span class="icon-my_location"></span> <span><?php echo $city ?> , <?php echo $country ?></span></div>
 		                </div>
 		              </div>
@@ -25,12 +26,17 @@ function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospit
 			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
 			                	<span class="icon-heart"></span>
 			                </a>
-                        </div>
-                        <form action="HospitalApp.php" method="get">
-                        <button type="submit" class="btn btn-primary py-2">Apply Job</button>
-                        <input type="hidden" name="hospitalApp" value="<?php echo $hospitalAppId ?>">
-                        <input type="hidden" name="hospitalCityCountry" value="<?php echo $city ?> , <?php echo $country ?>">
-                        </form>
+						</div>
+						<?php if($isApplied){
+							?>
+						
+						<span class="btn btn-dark disabled py-2">Applied ✔</span>
+						<?php 
+						}else{ ?>
+						<a href="<?php echo $url ?>" class="btn btn-primary py-2">Apply Job</a>
+						<?php 
+						}
+						?>
 		              </div>
                 </div>
             </div>
@@ -60,7 +66,7 @@ function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospit
                     $posts=$response->data;
                     foreach ($posts as $data) {
                         $post=$data->request;
-                        ApplicationPost($post->speciality,$post->hospitalName,$post->count,$post->country,$post->city,$post->hospitalAppId);
+                        ApplicationPost($post->speciality,$post->hospitalName,$post->count,$post->country,$post->city,$post->hospitalAppId,$post->isApplied);
                     }                    
                     ?>
 

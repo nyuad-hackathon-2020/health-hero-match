@@ -8,7 +8,6 @@ Navbar();
 
 $resp=file_get_contents("http://localhost:57984/Application?requestid=".$_GET["hospitalApp"]);
 $requestInfo=json_decode($resp);
-
 ?>
 <!-- write your html here -->
 <div class="hero-wrap hero-wrap-2 min-height-hero-img" style="background-image: url(&quot;images/bg_1.jpg&quot;); background-position: 50% 399.5px;" data-stellar-background-ratio="0.5">

@@ -1,6 +1,6 @@
 <?php 
 $userId=2;
-function Head(){
+function Head($added=true){
     ?>
     <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +10,8 @@ function Head(){
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&display=swap" rel="stylesheet">
 
-
+<?php if($added){ 
+  ?>
   <!--===============================================================================================-->	
   <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
   <!--===============================================================================================-->
@@ -27,7 +28,9 @@ function Head(){
     <link rel="stylesheet" type="text/css" href="css/util.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
   <!--===============================================================================================-->
-
+ <?php 
+}
+?>
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     

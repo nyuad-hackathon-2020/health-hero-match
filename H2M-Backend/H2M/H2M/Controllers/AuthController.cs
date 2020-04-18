@@ -152,8 +152,9 @@ namespace H2M.Controllers
                 {
                     specs.Add(doc.SpecialityId);
                 }
-                //return accepted
                 //var spec = db.Doctor.Include(u => u.DoctorSpeciality).Where(d => d.DoctorId);
+                var employeeRequested = db.EmployeeRequest.Where(a => a.UserId == docID).Select(a=>a.RequestId).ToList();
+
                 var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(a=>a.Hospital.IdNavigation).Include(a => a.Hospital.IdNavigation.City).Include(a => a.Hospital.IdNavigation.Country).Include(h => h.Speciality)
                     .Where(r => specs.Contains(r.SpecialityId));
                 List<RequestViewModel> result = new List<RequestViewModel>();
@@ -171,7 +172,7 @@ namespace H2M.Controllers
                     }
                     result.Add(new RequestViewModel
                     {
-                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id },
+                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id,isApplied= employeeRequested.Contains(h.Id) },
                         Distance = distance
                     });
                 }

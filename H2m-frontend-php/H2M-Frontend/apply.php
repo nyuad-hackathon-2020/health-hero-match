@@ -4,7 +4,14 @@ $resp=null;
 if(isset($_GET['UserId'])){
     $resp=file_get_contents("http://localhost:57984/apply?requestid=".$_GET["HospitalRequestId"]."&EmployeeId=".$_GET['UserId']);
     $requestInfo=json_decode($resp);
-    var_dump($requestInfo);
+    $color="primary";
+    $head="Well done!";
+    $body="You have applied successfully!";
+    if($requestInfo->code==208){
+        $color="danger";
+        $head="You've already applied here";
+        $body="Continue to apply apply for more hospitals.";
+    }
 }
 
 Head();
@@ -18,9 +25,9 @@ Navbar();
       <div class="container">
         <div class="row no-gutters slider-text align-items-end justify-content-start">
           <div class="col-md-12 ftco-animate text-center mb-5 fadeInUp ftco-animated">
-          <div class="alert alert-primary" role="alert">
-  <h4 class="alert-heading">Well done!</h4>
-  <p class="text-dark">You have applied successfully!</p>
+          <div class="alert alert-<?php echo $color ?>" role="alert">
+  <h4 class="alert-heading"><?php echo $head ?></h4>
+  <p class="text-dark"><?php echo $body ?></p>
   <hr>
   <div>
        <a href="hospitalD.php" class="btn btn-info">Continue</a>
