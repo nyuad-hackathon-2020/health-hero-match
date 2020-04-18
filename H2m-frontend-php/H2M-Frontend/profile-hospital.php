@@ -1,9 +1,58 @@
 <?php 
 require_once("layout.php");
+include("APIs.php");
+
 
 Head();
 
 Navbar();
+
+$data = getRequest($hospitalProfile . "3");
+$name = "";
+$email = "";
+$city = "";
+$country = "";
+$myRequests = [];
+$newRequests = [];
+
+if($data['code'] == 200){
+    $data = $data['data'];
+    $name = $data["hospitalInfo"]["name"];
+    $email = $data["hospitalInfo"]["email"];
+    $city = $data["hospitalInfo"]["city"];
+    $country =$data["hospitalInfo"]["country"];
+
+    $i = 0;
+    foreach($data["requests"] as $request){
+        $myRequests[] = array(
+            'id' => $request['id'],
+            'speciality' => $request['speciality']['name'],
+            'enabled' => $request['enabled'],
+            'count' => $request['count'],
+            'left' => $request['count'] - $data['leftPos'][$i]
+        );
+    }
+
+    foreach($data["newRequests"] as $request){
+        $newRequests[] = array(
+            'id' => $request['id'],
+            'userName' => $request['user']['name'],
+            'status' => $request['status'],
+            'time' => $request['time'],
+            'speciality' => $request['speciality']['name']
+        );
+    }
+
+}
+else{
+    echo "shit";
+}
+
+
+print_r($myRequests);
+
+
+
 
 ?>
 
@@ -46,7 +95,8 @@ Navbar();
                                         <thead>
                                             <tr class="row100 head" style="Background: linear-gradient(to right, #1274fe 0%, #384e9f 100%);">
                                                 <th class="cell100 column2">Type</th>
-                                                <th class="cell100 column3">Available Positions</th>
+                                                <th class="cell100 column3">All Positions</th>
+                                                <th class="cell100 column3">Left Positions</th>
                                                 <th class="cell100 column4">Status</th>
                                                 <th class="cell100 column5">Close</th>
                                             </tr>
@@ -59,30 +109,35 @@ Navbar();
                                             <tr class="row100 body">
                                                 <td class="cell100 column2">Doctor</td>
                                                 <td class="cell100 column3">5</td>
+                                                <td class="cell100 column3">2</td>
                                                 <td class="cell100 column4"> <span class="btn-pending">Pending</span></td>
-                                                <td class="cell100 column5"><a href="#" class="btn-cancle">Cancle</a></td>
+                                                <td class="cell100 column5"><a href="#" class="btn-cancle">Close</a></td>
                                             </tr>
                                             <tr class="row100 body">
                                                 <td class="cell100 column2">Doctor</td>
                                                 <td class="cell100 column3">20</td>
+                                                <td class="cell100 column3">0</td>
                                                 <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
                                                 <td class="cell100 column5"></td>
                                             </tr>
                                             <tr class="row100 body">
                                                 <td class="cell100 column2">Doctor</td>
                                                 <td class="cell100 column3">2</td>
+                                                <td class="cell100 column3">1</td>
                                                 <td class="cell100 column4"> <span class="btn-cancelled">Cancelled</span></td>
                                                 <td class="cell100 column5"></td>
                                             </tr>
                                             <tr class="row100 body">
                                                 <td class="cell100 column2">Doctor</td>
                                                 <td class="cell100 column3">14</td>
+                                                <td class="cell100 column3">0</td>
                                                 <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
                                                 <td class="cell100 column5"></td>
                                             </tr>
                                             <tr class="row100 body">
                                                 <td class="cell100 column2">Doctor</td>
                                                 <td class="cell100 column3">53</td>
+                                                <td class="cell100 column3">0</td>
                                                 <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
                                                 <td class="cell100 column5"></td>
                                             </tr>
@@ -122,27 +177,27 @@ Navbar();
                                             <tr class="row100 body">
                                                 <td class="cell100 column1">Monica Chang</td>
                                                 <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancle</a></td>
+                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
                                             </tr>
                                             <tr class="row100 body">
                                                 <td class="cell100 column1">Mahmoud Abdelhadi</td>
                                                 <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancle</a></td>
+                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
                                             </tr>
                                             <tr class="row100 body">
                                                 <td class="cell100 column1">Alexa Spagnola</td>
                                                 <td class="cell100 column2">Nurse</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancle</a></td>
+                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
                                             </tr>
                                             <tr class="row100 body">
                                                 <td class="cell100 column1">Amr Darawsheh</td>
                                                 <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancle</a></td>
+                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
                                             </tr>
                                             <tr class="row100 body">
                                                 <td class="cell100 column1">Danish Nihal</td>
                                                 <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancle</a></td>
+                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
                                             </tr>
 
                                         </tbody>
@@ -181,7 +236,6 @@ Navbar();
             })
         });
     </script>
-    <!--===============================================================================================-->
     <script src="js/table.js"></script>
 
     <?php
