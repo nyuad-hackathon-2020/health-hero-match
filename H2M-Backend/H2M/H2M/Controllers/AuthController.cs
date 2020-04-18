@@ -22,7 +22,7 @@ namespace H2M.Controllers
         // GET: api/Auth/5
         Response InternalErrorObj= new Response() {Code = (int)HttpStatusCode.InternalServerError,Data = "Internal server error"};
         [Route("~/login")]
-        [HttpPost]
+        [HttpGet]
         public Response Login([FromForm]string email, [FromForm] string password)
         {
             try
@@ -140,7 +140,7 @@ namespace H2M.Controllers
         }
 
         [Route("~/GetRequestsSorted")]
-        [HttpPost]
+        [HttpGet]
         public Response GetRequestsSorted([FromForm]double lon, [FromForm]double lat, [FromForm]int docID)
         {
             using (var db = new H2MDbContext()){
@@ -170,6 +170,36 @@ namespace H2M.Controllers
                     Code = (int)HttpStatusCode.OK,
                     Data = result
                 };
+            }
+        }
+
+
+        [Route("~/GetHospital")]
+
+        public Response GetHospital(int ID)
+        {
+
+            try
+            {
+
+                using (var db = new H2MDbContext())
+                {
+
+                    var hospital = db.Hospital.Include(h => h.HostpitalRequest).Include(h => h.IdNavigation).Where(h => h.Id == ID);
+                    return new Response(){
+                        Code = (int)HttpStatusCode.OK,
+                        Data = hospital
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response()
+                {
+                    Code = (int)HttpStatusCode.InternalServerError,
+                    Data = ex.ToString();
+                };
+
             }
         }
 
