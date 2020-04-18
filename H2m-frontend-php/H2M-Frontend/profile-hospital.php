@@ -7,11 +7,38 @@ Head();
 
 Navbar();
 
+$message = '
+';
+
+if(isset($_POST['acceptRequest'])){
+    $data = getRequest($AcceptReject."EmployeeRequestId="."&AcceptOrDecline=True");
+    $message = '
+    <div class="alert alert-success" role="alert">
+      '.$data['data']['msg'].'
+    </div>
+    ';
+    
+}
+else if(isset($_POST['rejctRequest'])){
+    $data = getRequest($AcceptReject."EmployeeRequestId="."&AcceptOrDecline=True");
+    $message = '
+    <div class="alert alert-success" role="alert">
+      '.$data['data']['msg'].'
+    </div>
+    ';
+}
+
+else if(isset($_POST['candleRequest'])){
+    $data = getRequest($AcceptReject."EmployeeRequestId="."&AcceptOrDecline=True");
+
+}
+
+
 $data = getRequest($hospitalProfile . "3");
 $name = "";
 $email = "";
-$city = "";
-$country = "";
+$city = "45";
+$country = "45";
 $myRequests = [];
 $newRequests = [];
 
@@ -29,44 +56,90 @@ if($data['code'] == 200){
             'speciality' => $request['speciality']['name'],
             'enabled' => $request['enabled'],
             'count' => $request['count'],
-            'left' => $request['count'] - $data['leftPos'][$i]
+            'left' => $data['leftPos'][$i]
         );
     }
 
     foreach($data["newRequests"] as $request){
+        $timestamp = strtotime($request['time']);
+        $new_date = date("d-m-Y", $timestamp);
         $newRequests[] = array(
             'id' => $request['id'],
             'userName' => $request['user']['name'],
             'status' => $request['status'],
-            'time' => $request['time'],
+            'time' => $new_date,
             'speciality' => $request['speciality']['name']
         );
     }
 
 }
 else{
-    echo "shit";
+    echo "SERVER ERROR";
 }
 
+$myReqs = "";
 
-print_r($myRequests);
+foreach($myRequests as $request){
+    if($request['enabled'] == 1){
+        $enabled = "Waiting";
+        $clooose = "<a href='#' class='btn-cancle'>Close</a>";
+    }
+    else{
+        $enabled = "Completed";
+        $clooose = "";
+    }
+    $myReqs .= '
+    <form method="post">
+        <tr class="row100 body">
+            <td class="cell100 column5">'.$request["id"].'</td>
+            <td class="cell100 column5">'.$request["speciality"].'</td>
+            <td class="cell100 column5">'.$request["count"].'</td>
+            <td class="cell100 column5">'.$request["left"].'</td>
+            <td class="cell100 column5"> <span class="btn-pending">'.$enabled.'</span></td>
+            <td class="cell100 column5">'.$clooose.'</td>
+        </tr>
+        </form>
+    ';
+}
 
-
-
+$newReqs = "";
+foreach($newRequests as $request){
+    if($request['status'] == 0){
+        $status = '<input type="submit" class="btn btn-success" value="Accept" name="acceptRequest"> <input type="submit" class="btn btn-danger" value="Reject" name="rejectRequest">';
+    }
+    else{
+        $status = "";
+    }
+    $newReqs .= '
+    <form method="post">
+        <tr class="row100 body">
+            <td class="cell100 column5">'.$request["id"].'</td>
+            <td class="cell100 column5">'.$request["userName"].'</td>
+            <td class="cell100 column5">'.$request["speciality"].'</td>
+            <td class="cell100 column5">'.$request["time"].'</td>
+            <td class="cell100 column5"><div class="row">'.$status.'</div></td>
+        </tr>
+    </form>
+    ';
+}
 
 ?>
 
     <div class="hero-wrap img ftco-candidates-2">
+
         <div class="overlay" style="z-index: -1;"></div>
         <div class="container">
             <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center" style="padding-top: 200px;height: auto;">
                 <div class="col-md-12">
+                <?php echo $message ?>
                     <div class="team d-md-flex p-4 bg-white" style="border-radius: 17px 17px 0 0px; margin-bottom: 0">
                         <div class="img" style="background-image: url(images/ny-hospital.jpg);"></div>
                         <div class="text pl-md-4">
-                            <span class="location mb-0">New York, USA</span>
-                            <h2>New York Hospital</h2>
+                            <span class="location mb-0"><?php echo $city.", ".$country ?></span>
+                            <h2><?php echo $name ?> Hospital</h2>
                             <span class="position">+1 212-312-5000</span>
+                            <span class="position"><?php echo $email ?> </span>
+                            
                             <p class="mb-2" style="color: #000000"></p>
                             <span class="seen">Last Request 3 hours ago</span>
                         </div>
@@ -94,10 +167,11 @@ print_r($myRequests);
                                     <table>
                                         <thead>
                                             <tr class="row100 head" style="Background: linear-gradient(to right, #1274fe 0%, #384e9f 100%);">
-                                                <th class="cell100 column2">Type</th>
-                                                <th class="cell100 column3">All Positions</th>
-                                                <th class="cell100 column3">Left Positions</th>
-                                                <th class="cell100 column4">Status</th>
+                                                <th class="cell100 column5">ID</th>
+                                                <th class="cell100 column5">Type</th>
+                                                <th class="cell100 column5">All Positions</th>
+                                                <th class="cell100 column5">No of applicants</th>
+                                                <th class="cell100 column5">Status</th>
                                                 <th class="cell100 column5">Close</th>
                                             </tr>
                                         </thead>
@@ -106,41 +180,8 @@ print_r($myRequests);
                                 <div class="table100-body js-pscroll ps ps--active-y">
                                     <table>
                                         <tbody>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3">5</td>
-                                                <td class="cell100 column3">2</td>
-                                                <td class="cell100 column4"> <span class="btn-pending">Pending</span></td>
-                                                <td class="cell100 column5"><a href="#" class="btn-cancle">Close</a></td>
-                                            </tr>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3">20</td>
-                                                <td class="cell100 column3">0</td>
-                                                <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                                <td class="cell100 column5"></td>
-                                            </tr>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3">2</td>
-                                                <td class="cell100 column3">1</td>
-                                                <td class="cell100 column4"> <span class="btn-cancelled">Cancelled</span></td>
-                                                <td class="cell100 column5"></td>
-                                            </tr>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3">14</td>
-                                                <td class="cell100 column3">0</td>
-                                                <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                                <td class="cell100 column5"></td>
-                                            </tr>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3">53</td>
-                                                <td class="cell100 column3">0</td>
-                                                <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                                <td class="cell100 column5"></td>
-                                            </tr>
+                                        <?php echo $myReqs ?>
+
 
                                         </tbody>
                                     </table>
@@ -164,9 +205,11 @@ print_r($myRequests);
                                     <table>
                                         <thead>
                                             <tr class="row100 head" style="Background: linear-gradient(to right, #1274fe 0%, #384e9f 100%);">
-                                                <th class="cell100 column1">Name</th>
-                                                <th class="cell100 column2">Type</th>
-                                                <th class="cell100 column4">Status</th>
+                                                <th class="cell100 column5">ID</th>
+                                                <th class="cell100 column5">Name</th>
+                                                <th class="cell100 column5">Type</th>
+                                                <th class="cell100 column5">Time</th>
+                                                <th class="cell100 column5">Status</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -174,31 +217,8 @@ print_r($myRequests);
                                 <div class="table100-body js-pscroll ps ps--active-y">
                                     <table>
                                         <tbody>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column1">Monica Chang</td>
-                                                <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
-                                            </tr>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column1">Mahmoud Abdelhadi</td>
-                                                <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
-                                            </tr>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column1">Alexa Spagnola</td>
-                                                <td class="cell100 column2">Nurse</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
-                                            </tr>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column1">Amr Darawsheh</td>
-                                                <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
-                                            </tr>
-                                            <tr class="row100 body">
-                                                <td class="cell100 column1">Danish Nihal</td>
-                                                <td class="cell100 column2">Doctor</td>
-                                                <td class="cell100 column3"><a href="#" class="btn-done">Accept</a> <a href="#" class="btn-cancle">Cancel</a></td>
-                                            </tr>
+                                        <?php echo $newReqs ?>
+
 
                                         </tbody>
                                     </table>

@@ -3,6 +3,7 @@
     $hospitalProfile = $baseURL .  "GetHospital?ID=";
     $profile = $baseURL ."GetProfile?";
     $Peak = $baseURL ."Peak?";
+    $AcceptReject = $baseURL . "ApproveRejectApplications?";
 
 
 

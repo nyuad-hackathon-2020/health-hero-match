@@ -55,6 +55,15 @@ namespace H2M.Controllers
                 return db.HostpitalRequest.Where(a=>a.HospitalId== hospitalID).ToList();
             }
         }
+        [Route("~/specialities")]
+        [HttpGet]
+        public dynamic specialities()
+        {
+            using (var db = new H2MDbContext())
+            {
+                return db.Speciality.Select(a=>new {a.Name,a.Id }).ToList();
+            }
+        }
         [Route("~/cities")]
         [HttpGet]
         public List<City> Cities()
@@ -129,6 +138,7 @@ namespace H2M.Controllers
                 }
             }
         }
+
         [Route("~/apply")]
         [HttpGet]
         public Response Apply(int EmployeeId,int RequestId)

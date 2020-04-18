@@ -14,7 +14,7 @@ Navbar();
       	<div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center">
 	        <div class="col-md-10 d-flex align-items-center ftco-animate">
 	        	<div class="text text-center pt-5 mt-md-5">
-	            <h1 class="mb-5">The Eassiest Way to Collaborate In Fighting Covid-19</h1>
+	            <h1 class="mb-5">We deploy healthcare heroes to the front-line!</h1>
 							<div class="ftco-counter ftco-no-pt ftco-no-pb">
 			        	<div class="row">
 				          <div class="col-md-4 d-flex justify-content-center counter-wrap ftco-animate">
