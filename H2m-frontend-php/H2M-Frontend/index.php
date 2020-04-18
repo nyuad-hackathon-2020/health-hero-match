@@ -7,9 +7,12 @@ Navbar();
 
 ?>
 
+
     
     <div class="hero-wrap img">
       <div class="overlay"></div>
+		<?php Animation() ?>
+		
       <div class="container">
       	<div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center">
 	        <div class="col-md-10 d-flex align-items-center ftco-animate">

@@ -143,20 +143,18 @@ namespace H2M.Controllers
         [HttpGet]
         public Response GetRequestsSorted(double? lon, double? lat, int docID)
         {
-            using (var db = new H2MDbContext()){
-                
+            using (var db = new H2MDbContext()) {
                 var specIDs = db.DoctorSpeciality.Where(doc => doc.DoctorId == docID).ToList();
                 List<int> specs = new List<int>();
 
-                foreach(DoctorSpeciality doc in specIDs)
+                foreach (DoctorSpeciality doc in specIDs)
                 {
                     specs.Add(doc.SpecialityId);
                 }
                 //var spec = db.Doctor.Include(u => u.DoctorSpeciality).Where(d => d.DoctorId);
-                var employeeRequested = db.EmployeeRequest.Where(a => a.UserId == docID).Select(a=>a.RequestId).ToList();
+                var employeeRequested = db.EmployeeRequest.Where(a => a.UserId == docID).Select(a => a.RequestId).ToList();
 
-                var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(a=>a.Hospital.IdNavigation).Include(a => a.Hospital.IdNavigation.City).Include(a => a.Hospital.IdNavigation.Country).Include(h => h.Speciality)
-                    .Where(r => specs.Contains(r.SpecialityId));
+                var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(a => a.Hospital.IdNavigation).Include(a => a.Hospital.IdNavigation.City).Include(a => a.Hospital.IdNavigation.Country).Include(h => h.Speciality).ToList();
                 List<RequestViewModel> result = new List<RequestViewModel>();
                 User user = null;
                 if (lon == null || lat == null)
@@ -168,14 +166,15 @@ namespace H2M.Controllers
                         distance = GetDistance(h.Hospital.Latitude.Value, h.Hospital.Longitude.Value, (double)lat, (double)lon);
                     else
                     {
-                        distance = user.CityId == h.Hospital.IdNavigation.CityId ? 0 : 1;
+                        distance = user.CityId == h.Hospital.IdNavigation.CityId ? 11111 : 111111;
                     }
                     result.Add(new RequestViewModel
                     {
-                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id,isApplied= employeeRequested.Contains(h.Id) },
+                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id, isApplied = employeeRequested.Contains(h.Id) },
                         Distance = distance
                     });
                 }
+                result.Sort((p, q) => p.Distance.CompareTo(q.Distance));
 
                 return new Response()
                 {
@@ -197,7 +196,7 @@ namespace H2M.Controllers
 
                     var hospitalInfo = db.User.Where(h => h.Id == ID).Select(a => new { a.Email, a.Name, City = a.City.Name, Country = a.Country.Name}).FirstOrDefault();
 
-                    var requests = db.HostpitalRequest.Where(r => r.HospitalId == ID).Select(a => new { a.Id, a.Speciality, a.Enabled, a.Count}).ToList();
+                    var requests = db.HostpitalRequest.Where(r => r.HospitalId == ID).Select(a => new { a.Id, a.Speciality, a.Enabled, a.Count }).ToList();
 
 
                     List<int> ids = new List<int>();
@@ -211,6 +210,8 @@ namespace H2M.Controllers
 
                     var newRequests = db.EmployeeRequest.Where(r => ids.Contains(r.RequestId)).Select(r => new { r.User, r.Status, r.Time, r.Request.Speciality, r.Id}).ToList();
 
+                    newRequests.Reverse();
+                    requests.Reverse();
 
                     //var newReuests = db.EmployeeRequest.Where(r => r.);
 

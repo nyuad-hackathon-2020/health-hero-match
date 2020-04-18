@@ -10,8 +10,11 @@ Navbar(true);
 $message = '
 ';
 
+
 if(isset($_POST['acceptRequest'])){
-    $data = getRequest($AcceptReject."EmployeeRequestId="."&AcceptOrDecline=True");
+    
+    $requestId = $_POST['requestId'];
+    $data = getRequest($AcceptReject."EmployeeRequestId=$requestId"."&AcceptOrDecline=True");
     $message = '
     <div class="alert alert-success" role="alert">
       '.$data['data']['msg'].'
@@ -20,7 +23,9 @@ if(isset($_POST['acceptRequest'])){
     
 }
 else if(isset($_POST['rejctRequest'])){
-    $data = getRequest($AcceptReject."EmployeeRequestId="."&AcceptOrDecline=True");
+    
+    $requestId = $_POST['requestId'];
+    $data = getRequest($AcceptReject."EmployeeRequestId=$requestId"."&AcceptOrDecline=True");
     $message = '
     <div class="alert alert-success" role="alert">
       '.$data['data']['msg'].'
@@ -108,7 +113,7 @@ foreach($newRequests as $request){
         $status = '<input type="submit" class="btn btn-success" value="Accept" name="acceptRequest"> <input type="submit" class="btn btn-danger" value="Reject" name="rejectRequest">';
     }
     else{
-        $status = "";
+        $status = "<span class='btn btn-success'>Accepted</span>";
     }
     $newReqs .= '
     <form method="post">
@@ -117,7 +122,7 @@ foreach($newRequests as $request){
             <td class="cell100 column5">'.$request["userName"].'</td>
             <td class="cell100 column5">'.$request["speciality"].'</td>
             <td class="cell100 column5">'.$request["time"].'</td>
-            <td class="cell100 column5"><div class="row">'.$status.'</div></td>
+            <td class="cell100 column5"><form method="post"><input hidden value="'.$request["id"].'" name="requestId">'.$status.'</div></td>
         </tr>
     </form>
     ';
@@ -127,7 +132,7 @@ foreach($newRequests as $request){
 
     <div class="hero-wrap img ftco-candidates-2">
 
-        <div class="overlay" style="z-index: -1;"></div>
+    <div class="overlay" style="z-index: -1;"><?php Animation() ?></div>
         <div class="container">
             <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center" style="padding-top: 200px;height: auto;">
                 <div class="col-md-12">

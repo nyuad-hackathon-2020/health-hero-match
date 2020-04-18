@@ -4,10 +4,59 @@ require_once("layout.php");
 Head();
 
 Navbar();
+function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospitalAppId,$isApplied, $distance){
+	$url="HospitalApp.php?hospitalApp=$hospitalAppId&hospitalCityCountry=$city , $country"
+    ?>
+            <div class="col-md-12 ftco-animate fadeInUp ftco-animated">
+                <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+                    <div class="one-third mb-4 mb-md-0">
+		                <div class="job-post-item-header align-items-center">
+						  <h2 class="mr-3 text-black"><span ><?php echo $speciality ?></span></h2>
+						 <h10 class="mr-3 text-black"><span><?php echo $hospitalName ?></span></h10>
+		                </div>
+		                <div class="job-post-item-body d-block d-md-flex">
+		                  <div class="mr-3">
+							  <span class="icon-layers"></span> <span><?php echo $count ?></span>
+							</div>
+							<div class="mr-3">
+							<span class="icon-road"></span>
+							   <span><?php echo $distance ?> KM</span>
+							</div>
+		                  <div>
+							  <span class="icon-my_location"></span>
+							   <span><?php echo $city ?> , <?php echo $country ?></span>
 
+
+							</div>
+		                </div>
+		              </div>
+
+		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
+		              	<div>
+			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+			                	<span class="icon-heart"></span>
+			                </a>
+						</div>
+						<?php if($isApplied){
+							?>
+						
+						<span class="btn btn-dark disabled py-2">Applied ✔</span>
+						<?php 
+						}else{ ?>
+						<a href="<?php echo $url ?>" class="btn btn-primary py-2">Apply Job</a>
+						<?php 
+						}
+						?>
+		              </div>
+                </div>
+            </div>
+    <?php
+    
+}
 ?>
-<div class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+<div class="hero-wrap hero-wrap-2" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
+	  <?php Animation() ?>
       <div class="container">
         <div class="row no-gutters slider-text align-items-end justify-content-start">
           <div class="col-md-12 ftco-animate text-center mb-5">
@@ -22,230 +71,18 @@ Navbar();
 				<div class="row">
 					<div class="col-lg-9 pr-lg-4">
 						<div class="row">
-							<div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Doctors</span>
-						  <h2 class="mr-3 text-black"><a href="#">Emergency medicine specialist</a></h2>
-						 <h10 class="mr-3 text-black"><a href="#">NYC Health + Hospitals / Bellevue</a></h10>
-		                </div>
-		                <div class="job-post-item-body d-block d-md-flex">
-		                  <div class="mr-3"><span class="icon-layers"></span> <a href="#">5</a></div>
-		                  <div><span class="icon-my_location"></span> <span>New York , USA</span></div>
-		                </div>
-		              </div>
+                    <?php 
+                    $resp=file_get_contents("http://localhost:57984/GetRequestsSorted?lon=-74.007081&lat=40.750385&docID=".$userId);
+                    $response=json_decode($resp);
+                    $posts=$response->data;
+                    foreach ($posts as $data) {
+                        $post=$data->request;
+                        ApplicationPost($post->speciality,$post->hospitalName,$post->count,$post->country,$post->city,$post->hospitalAppId,$post->isApplied, $data->distance);
+                    }                    
+                    ?>
 
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div><!-- end -->
 
-							<div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-							<span class="subadge">Doctors</span>
-							<h2 class="mr-3 text-black"><a href="#">Medical examiner</a></h2>
-						   <h10 class="mr-3 text-black"><a href="#">Flushing Hospital Medical Center</a></h10>
-						  </div>
-						  <div class="job-post-item-body d-block d-md-flex">
-							<div class="mr-3"><span class="icon-layers"></span> <a href="#">8</a></div>
-							<div><span class="icon-my_location"></span> <span>New York , USA</span></div>
-						  </div>
-		              </div>
 
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div><!-- end -->
-
-		          <div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Doctors</span>
-							<h2 class="mr-3 text-black"><a href="#">Thoracic surgeon</a></h2>
-						   <h10 class="mr-3 text-black"><a href="#">Beijing Hospital</a></h10>
-						  </div>
-						  <div class="job-post-item-body d-block d-md-flex">
-							<div class="mr-3"><span class="icon-layers"></span> <a href="#">2</a></div>
-							<div><span class="icon-my_location"></span> <span>Beijing , China</span></div>
-						  </div>
-		              </div>
-
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div><!-- end -->
-
-		          <div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Nurses</span>
-							<h2 class="mr-3 text-black"><a href="#">Neonatal Nurse</a></h2>
-						   <h10 class="mr-3 text-black"><a href="#">Peking University International Hospital</a></h10>
-						  </div>
-						  <div class="job-post-item-body d-block d-md-flex">
-							<div class="mr-3"><span class="icon-layers"></span> <a href="#">10</a></div>
-							<div><span class="icon-my_location"></span> <span>Beijing , China</span></div>
-						  </div>
-		              </div>
-
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div><!-- end -->
-
-		          <div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Doctors</span>
-							<h2 class="mr-3 text-black"><a href="#">Radiation oncologist</a></h2>
-						   <h10 class="mr-3 text-black"><a href="#">Policlinico of Milan</a></h10>
-						  </div>
-						  <div class="job-post-item-body d-block d-md-flex">
-							<div class="mr-3"><span class="icon-layers"></span> <a href="#">3</a></div>
-							<div><span class="icon-my_location"></span> <span>Milan , Italy</span></div>
-						  </div>
-		              </div>
-
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div><!-- end -->
-
-		         	<div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Nurses</span>
-							<h2 class="mr-3 text-black"><a href="#">Critical Care Nurse</a></h2>
-						   <h10 class="mr-3 text-black"><a href="#">Canadian Specialist Hospital</a></h10>
-						  </div>
-						  <div class="job-post-item-body d-block d-md-flex">
-							<div class="mr-3"><span class="icon-layers"></span> <a href="#">7</a></div>
-							<div><span class="icon-my_location"></span> <span>Dubai , UAE</span></div>
-						  </div>
-		              </div>
-
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div><!-- end -->
-
-		          <div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Doctors</span>
-							<h2 class="mr-3 text-black"><a href="#">Obstetrician</a></h2>
-						   <h10 class="mr-3 text-black"><a href="#">King Faisal Specialist Hospital & Research Centre</a></h10>
-						  </div>
-						  <div class="job-post-item-body d-block d-md-flex">
-							<div class="mr-3"><span class="icon-layers"></span> <a href="#">2</a></div>
-							<div><span class="icon-my_location"></span> <span>Riyadh , Saudi Arab</span></div>
-						  </div>
-		              </div>
-
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div><!-- end -->
-
-		          <div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Doctors</span>
-							<h2 class="mr-3 text-black"><a href="#">Allergist (immunologist)</a></h2>
-						   <h10 class="mr-3 text-black"><a href="#">Mediclinic Al Noor Hospital</a></h10>
-						  </div>
-						  <div class="job-post-item-body d-block d-md-flex">
-							<div class="mr-3"><span class="icon-layers"></span> <a href="#">4</a></div>
-							<div><span class="icon-my_location"></span> <span>Abu Dhabi , UAE</span></div>
-						  </div>
-		              </div>
-
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div><!-- end -->
-
-		          <div class="col-md-12 ftco-animate">
-		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-		              <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Nurses</span>
-							<h2 class="mr-3 text-black"><a href="#">Critical Care Nurse</a></h2>
-						   <h10 class="mr-3 text-black"><a href="#">Shanghai International Hospital</a></h10>
-						  </div>
-						  <div class="job-post-item-body d-block d-md-flex">
-							<div class="mr-3"><span class="icon-layers"></span> <a href="#">20</a></div>
-							<div><span class="icon-my_location"></span> <span> Shanghai , China</span></div>
-						  </div>
-		              </div>
-
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-		                </div>
-		                <a href="job-single.html" class="btn btn-primary py-2">Apply Job</a>
-		              </div>
-		            </div>
-		          </div><!-- end -->
 		        </div>
 		        <div class="row mt-5">
 		          <div class="col text-center">
@@ -303,6 +140,7 @@ Navbar();
 				</div>
 			</div>
 		</section>
+
 
 <?php
     Footer();

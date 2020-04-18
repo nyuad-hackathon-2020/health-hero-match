@@ -1,9 +1,9 @@
 <?php
     $baseURL = "http://localhost:57984/";
     $hospitalProfile = $baseURL .  "GetHospital?ID=";
-    $profile = $baseURL ."GetProfile?";
+    $profile = $baseURL ."MyProfile?userId=";
     $Peak = $baseURL ."Peak?";
-    $AcceptReject = $baseURL . "ApproveRejectApplications?";
+    $AcceptReject = $baseURL . "AcceptRejectApplications?";
 
 
 
