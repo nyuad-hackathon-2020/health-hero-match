@@ -5,11 +5,71 @@ Head();
 
 Navbar();
 
+$data = getRequest($hospitalProfile . "3");
+
+if($data['code'] == 200){
+    $userInfo = $data['userInfo'];
+    $name = $userInfo["name"];
+    $email = $userInfo["email"];
+    $city = $userInfo["city"]["name"];
+    $country =$userInfo["country"]["name"];
+
+    $i = 0;
+    foreach($data["requests"] as $request){
+        $myRequests[] = array(
+            'id' => $request['id'],
+            'speciality' => $request['speciality']['name'],
+            'enabled' => $request['enabled'],
+            'count' => $request['count'],
+            'left' => $data['leftPos'][$i]
+        );
+    }
+
+    foreach($data["newRequests"] as $request){
+        $timestamp = strtotime($request['time']);
+        $new_date = date("d-m-Y", $timestamp);
+        $newRequests[] = array(
+            'id' => $request['id'],
+            'userName' => $request['user']['name'],
+            'status' => $request['status'],
+            'time' => $new_date,
+            'speciality' => $request['speciality']['name']
+        );
+    }
+
+}
+else{
+    echo "SERVER ERROR";
+}
+
+$myReqs = "";
+
+foreach($myRequests as $request){
+    if($request['enabled'] == 1){
+        $enabled = "Waiting";
+        $clooose = "<a href='#' class='btn-cancle'>Close</a>";
+    }
+    else{
+        $enabled = "Completed";
+        $clooose = "";
+    }
+    $myReqs .= '
+    <form method="post">
+        <tr class="row100 body">
+            <td class="cell100 column5">'.$request["id"].'</td>
+            <td class="cell100 column5">'.$request["speciality"].'</td>
+            <td class="cell100 column5">'.$request["count"].'</td>
+            <td class="cell100 column5">'.$request["left"].'</td>
+            <td class="cell100 column5"> <span class="btn-pending">'.$enabled.'</span></td>
+            <td class="cell100 column5">'.$clooose.'</td>
+        </tr>
+        </form>
+    ';
+}
 
 ?>
     <div class="hero-wrap img ftco-candidates-2">
         <div class="overlay" style="z-index: -1;"><?php Animation() ?></div>
-        
         <div class="container">
             <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center" style="padding-top: 200px;height: auto;">
                 <div class="col-md-12">

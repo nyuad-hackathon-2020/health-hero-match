@@ -11235,7 +11235,7 @@ h5,
     background: -o-linear-gradient(left, #207dff 0%, #a16ae8 100%);
     background: -ms-linear-gradient(left, #207dff 0%, #a16ae8 100%);
     background: -webkit-gradient(linear, left top, right top, from(#207dff), to(#a16ae8));
-    background: linear-gradient(to right, #207dff 0%, #000d6c 100%);
+    background: linear-gradient(to right, #66a6ff 0%, #000d6c 100%);
     filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#207dff', endColorstr='#a16ae8', GradientType=1);
 }
 
@@ -11689,7 +11689,7 @@ h5,
     z-index: 0;
     background: #fff;
     position: relative;
-    width: 125%;
+    width: 100%;
     margin-bottom: 20px;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;

@@ -88,9 +88,14 @@ namespace H2M.Controllers
         {
             using (var db = new H2MDbContext())
             {
-                var userInfo = db.User.Where(a => a.Id == userId).Select(a => new { a.Email, a.Name , City = a.City.Name, Country = a.Country.Name}).FirstOrDefault();
+                var userInfo = db.User.Where(a => a.Id == userId).Select(a => new { a.Name, a.City, a.Country, a.Email, a.Id}).FirstOrDefault();
+
                 var specialtiesList = db.DoctorSpeciality.Where(a => a.DoctorId == userId).Select(a => a.Speciality.Name).ToList();
-                return new { userInfo, specialtiesList };
+
+                var requests = db.EmployeeRequest.Where(a => a.UserId == userInfo.Id).Select( a => new { a.Status, a.Request.Hospital, a.Time}).ToList();
+                requests.Reverse();
+
+                return new { userInfo, specialtiesList, requests };
             }
         }
 

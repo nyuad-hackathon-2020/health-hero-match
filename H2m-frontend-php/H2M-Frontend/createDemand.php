@@ -37,12 +37,11 @@ if(isset($_POST['HospitalId'])){
 
 Head();
 
-Navbar();
 
 ?>
 <!-- write your html here -->
-<div class="hero-wrap hero-wrap-2 fixed-top" style="background-image: url(&quot;images/bg_1.jpg&quot;); background-position: 50% 0%;" data-stellar-background-ratio="0.5">
-      <div class="overlay position-fixed"></div>
+<div class="hero-wrap hero-wrap-2 fixed-top" data-stellar-background-ratio="0.5">
+      <div class="overlay position-fixed"><?php Animation(); ?></div>
       <div class="container">
         <div class="row no-gutters slider-text align-items-end justify-content-start">
           <div class="col-md-12 ftco-animate text-center mb-5 fadeInUp ftco-animated">
@@ -61,6 +60,5 @@ Navbar();
     </div>
 
 <?php
-    Footer();
     Scripts();
 ?>
