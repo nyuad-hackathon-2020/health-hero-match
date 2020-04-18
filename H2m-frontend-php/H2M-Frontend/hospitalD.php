@@ -4,45 +4,7 @@ require_once("layout.php");
 Head();
 
 Navbar();
-function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospitalAppId,$isApplied){
-	$url="HospitalApp.php?hospitalApp=$hospitalAppId&hospitalCityCountry=$city , $country"
-    ?>
-            <div class="col-md-12 ftco-animate fadeInUp ftco-animated">
-                <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-                    <div class="one-third mb-4 mb-md-0">
-		                <div class="job-post-item-header align-items-center">
-		                	<span class="subadge">Doctors</span>
-						  <h2 class="mr-3 text-black"><span ><?php echo $speciality ?></span></h2>
-						 <h10 class="mr-3 text-black"><span><?php echo $hospitalName ?></span></h10>
-		                </div>
-		                <div class="job-post-item-body d-block d-md-flex">
-		                  <div class="mr-3"><span class="icon-layers"></span> <span><?php echo $count ?></span></div>
-		                  <div><span class="icon-my_location"></span> <span><?php echo $city ?> , <?php echo $country ?></span></div>
-		                </div>
-		              </div>
 
-		              <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-		              	<div>
-			                <a href="#" class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-			                	<span class="icon-heart"></span>
-			                </a>
-						</div>
-						<?php if($isApplied){
-							?>
-						
-						<span class="btn btn-dark disabled py-2">Applied ✔</span>
-						<?php 
-						}else{ ?>
-						<a href="<?php echo $url ?>" class="btn btn-primary py-2">Apply Job</a>
-						<?php 
-						}
-						?>
-		              </div>
-                </div>
-            </div>
-    <?php
-    
-}
 ?>
 <div class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
@@ -60,16 +22,6 @@ function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospit
 				<div class="row">
 					<div class="col-lg-9 pr-lg-4">
 						<div class="row">
-                    <?php 
-                    $resp=file_get_contents("http://localhost:57984/GetRequestsSorted?lon=-74.007081&lat=40.750385&docID=".$userId);
-                    $response=json_decode($resp);
-                    $posts=$response->data;
-                    foreach ($posts as $data) {
-                        $post=$data->request;
-                        ApplicationPost($post->speciality,$post->hospitalName,$post->count,$post->country,$post->city,$post->hospitalAppId,$post->isApplied);
-                    }                    
-                    ?>
-
 							<div class="col-md-12 ftco-animate">
 		            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
 		              <div class="one-third mb-4 mb-md-0">
@@ -351,7 +303,6 @@ function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospit
 				</div>
 			</div>
 		</section>
-
 
 <?php
     Footer();

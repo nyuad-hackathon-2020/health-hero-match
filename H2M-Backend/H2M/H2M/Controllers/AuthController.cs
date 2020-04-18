@@ -198,13 +198,18 @@ namespace H2M.Controllers
                     var hospitalInfo = db.User.Where(h => h.Id == ID).Select(a => new { a.Email, a.Name, City = a.City.Name, Country = a.Country.Name}).FirstOrDefault();
 
                     var requests = db.HostpitalRequest.Where(r => r.HospitalId == ID).Select(a => new { a.Id, a.Speciality, a.Enabled, a.Count}).ToList();
+
+
                     List<int> ids = new List<int>();
+                    List<int> leftPos = new List<int>();
                     foreach(var r in requests)
                     {
+                        var requestLeft = db.EmployeeRequest.Select(a => a.RequestId == r.Id).ToList().Count;
+                        leftPos.Add(requestLeft);
                         ids.Add(r.Id);
                     }
 
-                    var newRequests = db.EmployeeRequest.Where(r => ids.Contains(r.RequestId)).Select(r => new { r.User, r.Status, r.Time, r.Request.Speciality}).ToList();
+                    var newRequests = db.EmployeeRequest.Where(r => ids.Contains(r.RequestId)).Select(r => new { r.User, r.Status, r.Time, r.Request.Speciality, r.Id}).ToList();
 
 
                     //var newReuests = db.EmployeeRequest.Where(r => r.);
@@ -212,7 +217,7 @@ namespace H2M.Controllers
                     return new Response()
                     {
                         Code = (int)HttpStatusCode.OK,
-                        Data = new {hospitalInfo, requests , newRequests }
+                        Data = new {hospitalInfo, requests , leftPos, newRequests }
                     };
                 }
             }

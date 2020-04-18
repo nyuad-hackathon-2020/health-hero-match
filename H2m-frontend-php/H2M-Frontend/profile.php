@@ -6,7 +6,6 @@ Head();
 Navbar();
 
 ?>
-
     <div class="hero-wrap img ftco-candidates-2">
         <div class="overlay" style="z-index: -1;"></div>
         <div class="container">

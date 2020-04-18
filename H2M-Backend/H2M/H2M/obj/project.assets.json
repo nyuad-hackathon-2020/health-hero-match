@@ -12593,11 +12593,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\Projects\\H2M\\H2M-Backend\\H2M\\H2M\\H2M.csproj",
+      "projectUniqueName": "G:\\Projects\\H2M\\health-hero-match\\H2M-Backend\\H2M\\H2M\\H2M.csproj",
       "projectName": "H2M",
-      "projectPath": "G:\\Projects\\H2M\\H2M-Backend\\H2M\\H2M\\H2M.csproj",
+      "projectPath": "G:\\Projects\\H2M\\health-hero-match\\H2M-Backend\\H2M\\H2M\\H2M.csproj",
       "packagesPath": "C:\\Users\\mnhad\\.nuget\\packages\\",
-      "outputPath": "G:\\Projects\\H2M\\H2M-Backend\\H2M\\H2M\\obj\\",
+      "outputPath": "G:\\Projects\\H2M\\health-hero-match\\H2M-Backend\\H2M\\H2M\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\mnhad\\AppData\\Roaming\\NuGet\\NuGet.Config",
