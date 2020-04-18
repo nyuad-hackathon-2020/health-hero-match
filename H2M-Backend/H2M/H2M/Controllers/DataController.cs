@@ -122,6 +122,9 @@ namespace H2M.Controllers
                 {
                     var msg = "";
                     var userInfo = db.User.Where(a => a.Id == employeeRequest.UserId).FirstOrDefault();
+
+                    var request = db.HostpitalRequest.Where(a => a.Id == employeeRequest.RequestId).FirstOrDefault();
+
                     if (AcceptOrDecline)
                     {
                         employeeRequest.Status = 1;

@@ -204,7 +204,7 @@ namespace H2M.Controllers
                     List<int> leftPos = new List<int>();
                     foreach(var r in requests)
                     {
-                        var requestLeft = db.EmployeeRequest.Select(a => a.RequestId == r.Id).ToList().Count;
+                        var requestLeft = db.EmployeeRequest.Select(a => a.RequestId == r.Id && a.Status == 1).ToList().Count;
                         leftPos.Add(requestLeft);
                         ids.Add(r.Id);
                     }
