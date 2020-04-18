@@ -140,8 +140,8 @@ namespace H2M.Controllers
         }
 
         [Route("~/GetRequestsSorted")]
-        [HttpPost]
-        public Response GetRequestsSorted([FromForm]double lon, [FromForm]double lat, [FromForm]int docID)
+        [HttpGet]
+        public Response GetRequestsSorted(double? lon, double? lat, int docID)
         {
             using (var db = new H2MDbContext()){
                 
@@ -154,13 +154,23 @@ namespace H2M.Controllers
                 }
 
                 //var spec = db.Doctor.Include(u => u.DoctorSpeciality).Where(d => d.DoctorId);
-                var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(h => h.Hospital.IdNavigation).Where(r => specs.Contains(r.SpecialityId));
+                var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(a=>a.Hospital.IdNavigation).Include(a => a.Hospital.IdNavigation.City).Include(a => a.Hospital.IdNavigation.Country).Include(h => h.Speciality).Where(r => specs.Contains(r.SpecialityId));
                 List<RequestViewModel> result = new List<RequestViewModel>();
+                User user = null;
+                if (lon == null || lat == null)
+                    user = db.User.Where(a => a.Id == docID).FirstOrDefault();
                 foreach (HostpitalRequest h in _hospitals)
                 {
-                    var distance = GetDistance(h.Hospital.Latitude.Value, h.Hospital.Longitude.Value, lat, lon);
-                    result.Add(new RequestViewModel{
-                        Request = h,
+                    double distance = 0;
+                    if (lon != null && lat != null)
+                        distance = GetDistance(h.Hospital.Latitude.Value, h.Hospital.Longitude.Value, (double)lat, (double)lon);
+                    else
+                    {
+                        distance = user.CityId == h.Hospital.IdNavigation.CityId ? 0 : 1;
+                    }
+                    result.Add(new RequestViewModel
+                    {
+                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id },//($speciality,$hospitalName,$count,$country,$hospitalAppId)
                         Distance = distance
                     });
                 }

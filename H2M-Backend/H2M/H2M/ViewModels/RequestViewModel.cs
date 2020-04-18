@@ -11,7 +11,7 @@ namespace H2M.ViewModels
 
         public double Distance { get; set; }
 
-        public HostpitalRequest Request { get; set; }
+        public object Request { get; set; }
         
 
     }
