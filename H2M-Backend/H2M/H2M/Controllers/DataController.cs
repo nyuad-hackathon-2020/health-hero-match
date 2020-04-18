@@ -23,6 +23,7 @@ namespace H2M.Controllers
                 return db.Country.ToList();
             }
         }
+
         [Route("~/ApplyList")]
         [HttpGet]
         public List<HostpitalRequest> ApplyList(int hospitalID)
@@ -47,7 +48,18 @@ namespace H2M.Controllers
         {
             using (var db = new H2MDbContext())
             {
-                return db.HostpitalRequest.Where(a=>a.Id==RequestId&&a.Enabled).Select(a=>new { a.Count,a.Htmlpost,HospitalName=a.Hospital.IdNavigation.Name,SpecialityName=a.Speciality.Name }).FirstOrDefault();
+                return db.HostpitalRequest.Where(a=>a.Id==RequestId&&a.Enabled).Select(a=>new { a.Count,a.Htmlpost,HospitalName=a.Hospital.IdNavigation.Name,SpecialityName=a.Speciality.Name,email=a.Hospital.IdNavigation.Email }).FirstOrDefault();
+            }
+        }
+        [Route("~/MyProfile")]
+        [HttpGet]
+        public dynamic Profile(int userId)
+        {
+            using (var db = new H2MDbContext())
+            {
+                var userInfo = db.User.Where(a => a.Id == userId).Select(a => new { a.Email, a.Name , City = a.City.Name, Country = a.Country.Name}).FirstOrDefault();
+                var specialtiesList = db.DoctorSpeciality.Where(a => a.DoctorId == userId).Select(a => a.Speciality.Name).ToList();
+                return new { userInfo, specialtiesList };
             }
         }
         [Route("~/ApplicationHospital")]
