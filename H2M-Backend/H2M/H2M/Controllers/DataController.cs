@@ -14,6 +14,15 @@ namespace H2M.Controllers
     public class DataController : ControllerBase
     {
         // GET: api/Data
+        [Route("~/EmployeeRequests")]
+        [HttpGet]
+        public object EmployeeRequests(int userId)
+        {
+            using (var db = new H2MDbContext())
+            {
+                return db.EmployeeRequest.Include(a=>a.Request).Include(a=>a.Request.Hospital.IdNavigation).Where(a => a.UserId == userId).Select(a=>new { a.Request,a.Request.Hospital.IdNavigation.Name }).ToList();
+            }
+        }
         [Route("~/countries")]
         [HttpGet]
         public List<Country> Countries()
@@ -79,7 +88,7 @@ namespace H2M.Controllers
         {
             using (var db = new H2MDbContext())
             {
-                return db.HostpitalRequest.Where(a=>a.Id==RequestId&&a.Enabled).Select(a=>new { a.Count,a.Htmlpost,HospitalName=a.Hospital.IdNavigation.Name,SpecialityName=a.Speciality.Name,email=a.Hospital.IdNavigation.Email }).FirstOrDefault();
+                return db.HostpitalRequest.Where(a=>a.Id==RequestId&&a.Enabled).Select(a=>new { a.Count,a.Htmlpost,HospitalName=a.Hospital.IdNavigation.Name,SpecialityName=a.Speciality.Name,email=a.Hospital.IdNavigation.Email,a.Hospital.IdNavigation.Latitude,a.Hospital.IdNavigation.Longitude }).FirstOrDefault();
             }
         }
         [Route("~/MyProfile")]
