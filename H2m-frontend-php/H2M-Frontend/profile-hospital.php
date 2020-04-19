@@ -38,7 +38,7 @@ else if(isset($_POST['closeRequest'])){
     $requestId = $_POST['requestId'];
     $data = getRequest($CancelHospitalRequest.$requestId);
     $message = '
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-success" role="alert" style="color: #000000;">
       '.$data['data']['msg'].'
     </div>
     ';

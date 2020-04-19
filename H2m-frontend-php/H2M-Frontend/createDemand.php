@@ -8,7 +8,6 @@ if(isset($_POST['HospitalId'])){
             'SpecialityId' => $_POST['SpecialityId'],
             'count' => $_POST['count'],
             'htmlPost' => $_POST['editor'],
-
         )
     );
     

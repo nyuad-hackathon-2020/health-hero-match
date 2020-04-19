@@ -28,7 +28,6 @@ $list=json_decode($resp);
             <div class="row">
 
                 <div class="col-md-12 col-lg-12 mb-12">
-
                     <form action="createDemand.php" method="post" class="p-5 bg-white">
                         <input type="hidden" name="HospitalId" value="<?php echo $hospitalId ?>">
                         <div class="row form-group mb-4">
