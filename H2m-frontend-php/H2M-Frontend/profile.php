@@ -1,27 +1,85 @@
 <?php 
 require_once("layout.php");
+require_once("APIs.php");
+
 
 Head();
 
 Navbar();
 
+else if(isset($_POST['closeRequest'])){
+
+    $requestId = $_POST['requestId'];
+    $data = getRequest($CancelDoctorRequest.$requestId);
+    $message = '
+    <div class="alert alert-success" role="alert">
+      '.$data['data']['msg'].'
+    </div>
+    ';
+
+}
+
+
+$data = getRequest($profile . "2");
+
+$userInfo = $data['userInfo'];
+$name = $userInfo["name"];
+$email = $userInfo["email"];
+$city = $userInfo["city"]["name"];
+$country =$userInfo["country"]["name"];
+
+
+$specialties = "";
+foreach($data['specialtiesList'] as $spec){
+    $specialties .= '<span class="position">'.$spec.'</span>';
+}
+
+$requests = "";
+foreach($data['requests'] as $request){
+    $status = $request['status'];
+    if($status == 1){
+        $status = '<span class="btn btn-done">Accepted</span>';
+        $cancel = "";
+    }
+    else if($status == -1){
+        $status = '<span class="btn btn-cancelled">Declined</span>';
+        $cancel = "";
+    }
+    else{
+        $status = '<span class="btn btn-pending">Pending</span>';
+        $cancel = '<input type="submit" value="Cancel" class="btn btn-cancle">';
+    }
+    $timestamp = strtotime($request['time']);
+    $new_date = date("d-m-Y", $timestamp);
+
+    $requests .= '<tr class="row100 body">
+        <td class="cell100 column1">'.$request['name'].'</td>
+        <td class="cell100 column5">'.$data['specialtiesList'][0].'</td>
+        <td class="cell100 column5">'.$new_date.'</td>
+        <td class="cell100 column5">'.$status.'</td>
+        <td class="cell100 column5">'.$cancel.'</td>
+    </tr>
+    ';
+}
+
+
 
 ?>
     <div class="hero-wrap img ftco-candidates-2">
         <div class="overlay" style="z-index: -1;"><?php Animation() ?></div>
-        
         <div class="container">
             <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center" style="padding-top: 200px;height: auto;">
                 <div class="col-md-12">
                     <div class="team d-md-flex p-4 bg-white" style="border-radius: 17px 17px 0 0px; margin-bottom: 0">
                         <div class="img" style="background-image: url(images/person_1.jpg);"></div>
                         <div class="text pl-md-4">
-                            <span class="location mb-0">New York, USA</span>
-                            <h2>Danica Lewis</h2>
-                            <span class="position">Doctor</span>
-                            <span class="position">+1 125 122 1222</span>
+                            <span class="location mb-0"><?php echo $city.", ".$country ?></span>
+                            <h2><?php echo $name ?></h2>
+                            
+                            <span class="position">+971 2 5546325</span>
+                            <span class="position"><?php echo $email ?></span>
                             <p class="mb-2" style="color: #000000"></p>
-                            <span class="seen">Last Contribute 1 month ago</span>
+                            <span class="seen">Last Contribute 2 days ago</span>
                         </div>
                     </div>
                 </div>
@@ -35,9 +93,9 @@ Navbar();
                             <thead>
                                 <tr class="row100 head" style="Background: linear-gradient(to right, #1274fe 0%, #384e9f 100%);">
                                     <th class="cell100 column1">Hospital name</th>
-                                    <th class="cell100 column2">Type</th>
-                                    <th class="cell100 column3">Time</th>
-                                    <th class="cell100 column4">Status</th>
+                                    <th class="cell100 column5">Type</th>
+                                    <th class="cell100 column5">Time</th>
+                                    <th class="cell100 column5">Status</th>
                                     <th class="cell100 column5">Cancle</th>
                                 </tr>
                             </thead>
@@ -46,125 +104,7 @@ Navbar();
                     <div class="table100-body js-pscroll ps ps--active-y">
                         <table>
                             <tbody>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-pending">Pending</span></td>
-                                    <td class="cell100 column5"><a href="#" class="btn-cancle" >Cancle</a></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-cancelled">Cancelled</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-cancelled">Cancelled</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-								</tr>
-								<tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-cancelled">Cancelled</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-								</tr>
-								<tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-cancelled">Cancelled</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
-                                <tr class="row100 body">
-                                    <td class="cell100 column1">New York Hospital</td>
-                                    <td class="cell100 column2">Doctor</td>
-                                    <td class="cell100 column3">11/3/2020 - 15/3/2020</td>
-                                    <td class="cell100 column4"> <span class="btn-done">Completed</span></td>
-                                    <td class="cell100 column5"></td>
-                                </tr>
+                                <?php echo $requests ?>
                             </tbody>
                         </table>
                         <div class="ps__rail-x" style="left: 0px; bottom: -374.4px;">
@@ -196,7 +136,7 @@ Navbar();
             })
         });
     </script>
-    <!--===============================================================================================-->
+
     <script src="js/table.js"></script>
 
     <?php

@@ -25,7 +25,7 @@ if(isset($_POST['acceptRequest'])){
 else if(isset($_POST['rejctRequest'])){
     
     $requestId = $_POST['requestId'];
-    $data = getRequest($AcceptReject."EmployeeRequestId=$requestId"."&AcceptOrDecline=True");
+    $data = getRequest($AcceptReject."EmployeeRequestId=$requestId"."&AcceptOrDecline=False");
     $message = '
     <div class="alert alert-success" role="alert">
       '.$data['data']['msg'].'
@@ -33,8 +33,15 @@ else if(isset($_POST['rejctRequest'])){
     ';
 }
 
-else if(isset($_POST['candleRequest'])){
-    $data = getRequest($AcceptReject."EmployeeRequestId="."&AcceptOrDecline=True");
+else if(isset($_POST['closeRequest'])){
+
+    $requestId = $_POST['requestId'];
+    $data = getRequest($CancelHospitalRequest.$requestId);
+    $message = '
+    <div class="alert alert-success" role="alert">
+      '.$data['data']['msg'].'
+    </div>
+    ';
 
 }
 
@@ -46,6 +53,7 @@ $city = "45";
 $country = "45";
 $myRequests = [];
 $newRequests = [];
+$peak = "";
 
 if($data['code'] == 200){
     $data = $data['data'];
@@ -53,6 +61,20 @@ if($data['code'] == 200){
     $email = $data["hospitalInfo"]["email"];
     $city = $data["hospitalInfo"]["city"];
     $country =$data["hospitalInfo"]["country"];
+
+    if($data['isPeak'] == true){
+        $peak = '
+        <div style="float: right;" class="col-md-4">
+            <div class="alert alert-danger">
+                <div class="container">
+                    <b>Peak Alert:</b> Damn man! Seems your area is having a PEAK !
+                </div>
+            </div>
+        </div>';
+    }
+    else{
+
+    }
 
     $i = 0;
     foreach($data["requests"] as $request){
@@ -87,7 +109,7 @@ $myReqs = "";
 foreach($myRequests as $request){
     if($request['enabled'] == 1){
         $enabled = "Waiting";
-        $clooose = "<a href='#' class='btn-cancle'>Close</a>";
+        $clooose = "<input type='submit' name='closeRequest' value='Close' class='btn-cancle'>";
     }
     else{
         $enabled = "Completed";
@@ -101,7 +123,7 @@ foreach($myRequests as $request){
             <td class="cell100 column5">'.$request["count"].'</td>
             <td class="cell100 column5">'.$request["left"].'</td>
             <td class="cell100 column5"> <span class="btn-pending">'.$enabled.'</span></td>
-            <td class="cell100 column5">'.$clooose.'</td>
+            <td class="cell100 column5"><form method="post"><input hidden name="requestId" value="'.$request["id"].'"> '.$clooose.'</form></td>
         </tr>
         </form>
     ';
@@ -131,7 +153,23 @@ foreach($newRequests as $request){
 ?>
 
     <div class="hero-wrap img ftco-candidates-2">
+<style>
 
+.alert {
+    border: 0;
+    border-radius: 0;
+    padding: 20px 15px !important;
+    line-height: 20px;
+    font-weight: 300;
+    color: #fff;
+}
+
+.alert.alert-danger {
+    background-color: #f55145;
+    color: #fff;
+}
+
+</style>
     <div class="overlay" style="z-index: -1;"><?php Animation() ?></div>
         <div class="container">
             <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center" style="padding-top: 200px;height: auto;">
@@ -139,15 +177,15 @@ foreach($newRequests as $request){
                 <?php echo $message ?>
                     <div class="team d-md-flex p-4 bg-white" style="border-radius: 17px 17px 0 0px; margin-bottom: 0">
                         <div class="img" style="background-image: url(images/ny-hospital.jpg);"></div>
-                        <div class="text pl-md-4">
+                        <div class="text pl-md-4 col-md-6">
                             <span class="location mb-0"><?php echo $city.", ".$country ?></span>
                             <h2><?php echo $name ?> Hospital</h2>
-                            <span class="position">+1 212-312-5000</span>
+                            <span class="position">+971 2 5546325</span>
                             <span class="position"><?php echo $email ?> </span>
-                            
                             <p class="mb-2" style="color: #000000"></p>
                             <span class="seen">Last Request 3 hours ago</span>
                         </div>
+                        <?php echo $peak; ?>
                     </div>
                 </div>
             </div>

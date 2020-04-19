@@ -141,7 +141,7 @@ namespace H2M.Controllers
 
         [Route("~/GetRequestsSorted")]
         [HttpGet]
-        public Response GetRequestsSorted(double? lon, double? lat, int docID)
+        public async Task<Response> GetRequestsSorted(double? lon, double? lat, int docID)
         {
             using (var db = new H2MDbContext()) {
                 var specIDs = db.DoctorSpeciality.Where(doc => doc.DoctorId == docID).ToList();
@@ -156,6 +156,7 @@ namespace H2M.Controllers
 
                 var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(a => a.Hospital.IdNavigation).Include(a => a.Hospital.IdNavigation.City).Include(a => a.Hospital.IdNavigation.Country).Include(h => h.Speciality).ToList();
                 List<RequestViewModel> result = new List<RequestViewModel>();
+
                 User user = null;
                 if (lon == null || lat == null)
                     user = db.User.Where(a => a.Id == docID).FirstOrDefault();
@@ -168,9 +169,10 @@ namespace H2M.Controllers
                     {
                         distance = user.CityId == h.Hospital.IdNavigation.CityId ? 11111 : 111111;
                     }
+                    bool isPeak = await getPeak(h.Hospital.IdNavigation.City.Initals);
                     result.Add(new RequestViewModel
                     {
-                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id, isApplied = employeeRequested.Contains(h.Id) },
+                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id, isApplied = employeeRequested.Contains(h.Id), isPeak = false },
                         Distance = distance
                     });
                 }
@@ -186,18 +188,18 @@ namespace H2M.Controllers
 
 
         [Route("~/GetHospital")]
-
-        public Response GetHospital(int ID)
+        public async Task<Response> GetHospital(int ID)
         {
             try
             {
                 using (var db = new H2MDbContext())
                 {
 
-                    var hospitalInfo = db.User.Where(h => h.Id == ID).Select(a => new { a.Email, a.Name, City = a.City.Name, Country = a.Country.Name}).FirstOrDefault();
+                    var hospitalInfo = db.User.Where(h => h.Id == ID).Select(a => new { a.Email, a.Name, City = a.City.Name, Country = a.Country.Name, Initls = a.City.Initals}).FirstOrDefault();
 
                     var requests = db.HostpitalRequest.Where(r => r.HospitalId == ID).Select(a => new { a.Id, a.Speciality, a.Enabled, a.Count }).ToList();
 
+                    bool isPeak = await getPeak(hospitalInfo.Initls);
 
                     List<int> ids = new List<int>();
                     List<int> leftPos = new List<int>();
@@ -218,7 +220,7 @@ namespace H2M.Controllers
                     return new Response()
                     {
                         Code = (int)HttpStatusCode.OK,
-                        Data = new {hospitalInfo, requests , leftPos, newRequests }
+                        Data = new {hospitalInfo, requests , leftPos, newRequests , isPeak }
                     };
                 }
             }
@@ -285,29 +287,30 @@ namespace H2M.Controllers
                 {
                     var hospital = db.User.Include(c => c.City).Where(h => h.Id == HospitalID).FirstOrDefault();
                     var init = hospital.City.Initals;
+                    //var result = await getData("MA");
                     var result = await getData(init);
                     var data = JsonConvert.DeserializeObject<List<Dictionary<String, dynamic>>>(result);
                     //double percent = 0;
                     double sum = 0;
                     List<double> nums = new List<double>();
                     nums.Add(0);
-                    for (int i = data.Count - 1; i >= Math.Max(data.Count - 4, 0); i--)
+                    for (int i = data.Count - 1; i >= Math.Max(data.Count - 14, 0); i--)
                     {
                         sum += data[i]["positive"] - data[i-1]["positive"];
-                        nums.Add(sum - nums[nums.Count - 1]);
+                        nums.Add(data[i]["positive"] - data[i - 1]["positive"]);
                     }
 
-                    sum /= Math.Min(data.Count, 4);
-                    
-                    for (int i= data.Count-1;i> data.Count - 4; i--)
+                    sum /= Math.Min(data.Count, 14);                       
+                    var lastDay = data[data.Count - 1]["positive"] - data[data.Count - 2]["positive"];
+                    if (lastDay >= (sum - sum*0.1))
                     {
-
+                        isPeak = true;
                     }
-
+                    sum = (sum - sum * 0.1);
                     return new Response()
                     {
                         Code = (int)HttpStatusCode.OK,
-                        Data = sum
+                        Data = new { isPeak , sum , init, lastDay, nums}
                     };
                 }
 
@@ -326,6 +329,31 @@ namespace H2M.Controllers
             var hc = new HttpClient();
             var result = await hc.GetStringAsync(uri);
             return result;
+        }
+
+        private async Task<bool> getPeak(String initls)
+        {
+            var result = await getData(initls);
+            var data = JsonConvert.DeserializeObject<List<Dictionary<String, dynamic>>>(result);
+            //double percent = 0;
+            double sum = 0;
+            List<double> nums = new List<double>();
+            nums.Add(0);
+            for (int i = data.Count - 1; i >= Math.Max(data.Count - 14, 0); i--)
+            {
+                sum += data[i]["positive"] - data[i - 1]["positive"];
+                nums.Add(data[i]["positive"] - data[i - 1]["positive"]);
+            }
+
+            sum /= Math.Min(data.Count, 14);
+            var lastDay = data[data.Count - 1]["positive"] - data[data.Count - 2]["positive"];
+            if (lastDay >= (sum - sum * 0.1))
+            {
+                return true;
+            }
+
+            return false;
+
         }
 
     }
