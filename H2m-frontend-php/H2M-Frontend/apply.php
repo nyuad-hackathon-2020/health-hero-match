@@ -31,6 +31,12 @@ Navbar();
   <hr>
   <div>
        <a href="hospitalD.php" class="btn btn-info">Continue</a>
+       <?php 
+       if($requestInfo->code!=208) 
+        echo '<button type="button" id="showModal" class="btn btn-light  ml-3" data-toggle="modal" data-target="#NearbyHotels">
+        Show nearby Hotels
+    </button>';
+       ?>
     </div>
 
 </div>
@@ -40,6 +46,7 @@ Navbar();
     </div>
 
 <?php
+    Hotels();
     Footer();
     Scripts();
 ?>

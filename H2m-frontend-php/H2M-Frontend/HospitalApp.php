@@ -1,7 +1,7 @@
 <?php 
 require_once("layout.php");
 if(isset($_GET["hospitalApp"])){
-
+  
 Head();
 
 Navbar();
@@ -44,7 +44,7 @@ $requestInfo=json_decode($resp);
                                     </button>
                                     <input type="hidden" name="HospitalRequestId" value="<?php echo $_GET["hospitalApp"] ?>">
                                     <input type="hidden" name="UserId" value="<?php echo $userId ?>">
-                                    <button type="submit" class="btn btn-light float-right mr-3">
+                                    <button type="button" id="showModal" class="btn btn-light float-right mr-3" data-toggle="modal" data-target="#NearbyHotels">
                                         Nearby Hotels
                                     </button>
                                 </form>
@@ -59,10 +59,10 @@ $requestInfo=json_decode($resp);
     		</div>
     	</div>
     </section>
-    
+  
 <?php
+    Hotels();
     Footer();
     Scripts();
+    
 }
-
-?>
