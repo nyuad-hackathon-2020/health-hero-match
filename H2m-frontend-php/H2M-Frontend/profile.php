@@ -7,7 +7,9 @@ Head();
 
 Navbar();
 
-else if(isset($_POST['closeRequest'])){
+$message = "";
+
+if(isset($_POST['closeRequest'])){
 
     $requestId = $_POST['requestId'];
     $data = getRequest($CancelDoctorRequest.$requestId);
@@ -47,17 +49,18 @@ foreach($data['requests'] as $request){
     }
     else{
         $status = '<span class="btn btn-pending">Pending</span>';
-        $cancel = '<input type="submit" value="Cancel" class="btn btn-cancle">';
+        $cancel = '<input type="submit" name="closeRequest" value="Cancel" class="btn btn-cancle">';
     }
     $timestamp = strtotime($request['time']);
     $new_date = date("d-m-Y", $timestamp);
 
     $requests .= '<tr class="row100 body">
+        <td class="cell100 column5">'.$request['id'].'</td>
         <td class="cell100 column1">'.$request['name'].'</td>
         <td class="cell100 column5">'.$data['specialtiesList'][0].'</td>
         <td class="cell100 column5">'.$new_date.'</td>
         <td class="cell100 column5">'.$status.'</td>
-        <td class="cell100 column5">'.$cancel.'</td>
+        <td class="cell100 column5"><form method="post"><input hidden name="requestId" value="'.$request['id'].'">'.$cancel.'</form></td>
     </tr>
     ';
 }
@@ -70,6 +73,7 @@ foreach($data['requests'] as $request){
         <div class="container">
             <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-center" style="padding-top: 200px;height: auto;">
                 <div class="col-md-12">
+                <?php echo $message ?>
                     <div class="team d-md-flex p-4 bg-white" style="border-radius: 17px 17px 0 0px; margin-bottom: 0">
                         <div class="img" style="background-image: url(images/person_1.jpg);"></div>
                         <div class="text pl-md-4">
@@ -92,6 +96,7 @@ foreach($data['requests'] as $request){
                         <table>
                             <thead>
                                 <tr class="row100 head" style="Background: linear-gradient(to right, #1274fe 0%, #384e9f 100%);">
+                                    <th class="cell100 column5">ID</th>
                                     <th class="cell100 column1">Hospital name</th>
                                     <th class="cell100 column5">Type</th>
                                     <th class="cell100 column5">Time</th>

@@ -29,7 +29,9 @@ namespace H2M.Controllers
         {
             using (var db=new H2MDbContext())
             {
+
                 return db.Country.ToList();
+                
             }
         }
         [Route("~/NewDemand")]
@@ -101,7 +103,7 @@ namespace H2M.Controllers
 
                 var specialtiesList = db.DoctorSpeciality.Where(a => a.DoctorId == userId).Select(a => a.Speciality.Name).ToList();
 
-                var requests = db.EmployeeRequest.Where(a => a.UserId == userInfo.Id).Select( a => new { a.Status, a.Request.Hospital.IdNavigation.Name, a.Time}).ToList();
+                var requests = db.EmployeeRequest.Where(a => a.UserId == userInfo.Id).Select( a => new { a.Status, a.Request.Hospital.IdNavigation.Name, a.Time, a.Id}).ToList();
                 requests.Reverse();
 
                 return new { 
@@ -165,7 +167,7 @@ namespace H2M.Controllers
         {
             using (var db = new H2MDbContext())
             {
-                var employeeRequest = db.HostpitalRequest.Include(a => a.Enabled).Where(a => a.Id == requestId).FirstOrDefault();
+                var employeeRequest = db.HostpitalRequest.Where(a => a.Id == requestId).FirstOrDefault();
 
                 if (employeeRequest == null)
                 {
@@ -192,7 +194,7 @@ namespace H2M.Controllers
         {
             using (var db = new H2MDbContext())
             {
-                var employeeRequest = db.EmployeeRequest.Include(a => a.Status).Where(a => a.Id == requestId).FirstOrDefault();
+                var employeeRequest = db.EmployeeRequest.Where(a => a.Id == requestId).FirstOrDefault();
                 if (employeeRequest == null)
                 {
                     return new Response()

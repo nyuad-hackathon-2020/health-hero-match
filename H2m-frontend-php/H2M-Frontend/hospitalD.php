@@ -4,14 +4,27 @@ require_once("layout.php");
 Head();
 
 Navbar();
-function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospitalAppId,$isApplied, $distance){
+function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospitalAppId,$isApplied, $distance, $isPeak){
+	if($isPeak){
+		$isPeak = '<h2 class="mr-3 text-black" style=""><span style="
+		background: red;
+		color: #fff;
+		padding: 0 14px;
+		border-radius: 7px;
+	">Having a Peak</span></h2>';
+	}	
+	else{
+		$isPeak = "";
+	}
+
 	$url="HospitalApp.php?hospitalApp=$hospitalAppId&hospitalCityCountry=$city , $country"
     ?>
             <div class="col-md-12 ftco-animate fadeInUp ftco-animated">
                 <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
                     <div class="one-third mb-4 mb-md-0">
 		                <div class="job-post-item-header align-items-center">
-						  <h2 class="mr-3 text-black"><span ><?php echo $speciality ?></span></h2>
+						<?php echo $isPeak ?>
+						<h2 class="mr-3 text-black"><span ><?php echo $speciality ?></span></h2>
 						 <h10 class="mr-3 text-black"><span><?php echo $hospitalName ?></span></h10>
 		                </div>
 		                <div class="job-post-item-body d-block d-md-flex">
@@ -79,7 +92,7 @@ function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospit
                     $posts=$response->data;
                     foreach ($posts as $data) {
                         $post=$data->request;
-                        ApplicationPost($post->speciality,$post->hospitalName,$post->count,$post->country,$post->city,$post->hospitalAppId,$post->isApplied, $data->distance);
+                        ApplicationPost($post->speciality,$post->hospitalName,$post->count,$post->country,$post->city,$post->hospitalAppId,$post->isApplied, $data->distance,$post->isPeak);
                     }                    
                     ?>
 
