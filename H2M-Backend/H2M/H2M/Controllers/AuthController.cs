@@ -173,7 +173,7 @@ namespace H2M.Controllers
                     bool isPeak = await getPeak(h.Hospital.IdNavigation.City.Initals);
                     result.Add(new RequestViewModel
                     {
-                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id, isApplied = employeeRequested.Contains(h.Id), isPeak = false },
+                        Request = new { speciality = h.Speciality.Name, hospitalName = h.Hospital.IdNavigation.Name, count = h.Count, country = h.Hospital.IdNavigation.Country.Name, city = h.Hospital.IdNavigation.City.Name, hospitalAppId = h.Id, isApplied = employeeRequested.Contains(h.Id), isPeak },
                         Distance = distance
                     });
                 }

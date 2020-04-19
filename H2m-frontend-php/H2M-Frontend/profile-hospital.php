@@ -10,6 +10,10 @@ Navbar(true);
 $message = '
 ';
 
+if(isset($_GET['id'])){
+    $hospitalId=$_GET['id'];
+}
+
 
 if(isset($_POST['acceptRequest'])){
     
@@ -46,7 +50,7 @@ else if(isset($_POST['closeRequest'])){
 }
 
 
-$data = getRequest($hospitalProfile . "3");
+$data = getRequest($hospitalProfile . $hospitalId);
 $name = "";
 $email = "";
 $city = "45";
@@ -136,7 +140,7 @@ foreach($myRequests as $request){
 $newReqs = "";
 foreach($newRequests as $request){
     if($request['status'] == 0){
-        $status = '<input type="submit" class="btn btn-success mr-3 px-3 float-left" value="✔" name="acceptRequest"> <input type="submit" class="btn btn-danger float-right" value="❌" name="rejectRequest">';
+        $status = '<input type="submit" class="btn btn-success float-left" value="✔" name="acceptRequest"> <input type="submit" class="btn btn-danger float-right" value="❌" name="rejectRequest">';
     }
     else{
         $status = "<span class='btn btn-success btn-block'>Accepted</span>";
@@ -188,8 +192,13 @@ foreach($newRequests as $request){
                         <div class="img" style="background-image: url(images/ny-hospital.jpg);"></div>
                         <div class="text pl-md-4 col-md-6">
                             <span class="location mb-0"><?php echo $city.", ".$country ?></span>
-                            <h2><?php echo $name ?> Hospital</h2>
-                            <span class="position">+971 2 5546325</span>
+                            <h2><?php echo $name ?> </h2>
+                            <span class="position"><?php if($hospitalId == 13){
+                                echo "+1 118 554 6325";
+                            }
+                            else{
+                                echo "+971 2 5546325";
+                            } ?></span>
                             <span class="position"><?php echo $email ?> </span>
                             <p class="mb-2" style="color: #000000"></p>
                             <span class="seen">Last Request 3 hours ago</span>

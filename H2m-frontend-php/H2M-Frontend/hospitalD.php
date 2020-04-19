@@ -87,8 +87,10 @@ function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospit
 					<?php 
 					//24.495970, 54.383114
 					//lon=-74.007081&lat=40.750385&docID=
-					$lon=54.367895;
-					$lat=24.469822;
+					//24.523613, 54.434725
+					$lon=54.434725;
+					$lat=24.523613;
+					//24.495970, 54.383114
                     $resp=file_get_contents("http://localhost:57984/GetRequestsSorted?lon=$lon&lat=$lat&docID=".$userId);
                     $response=json_decode($resp);
                     $posts=$response->data;
@@ -117,7 +119,16 @@ function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospit
 		          </div>
 		        </div>
 		      </div>
+
 		      <div class="col-lg-3 sidebar">
+			  <div class="sidebar-box bg-white p-4 ftco-animate">
+		        	<h3 class="heading-sidebar">Filter</h3>
+		        	<form action="#" class="browse-form">
+							  <label for="option-job-1"><input type="checkbox" id="option-job-1" name="vehicle" value="" checked> Distance</label><br>
+							  <label for="option-job-2"><input type="checkbox" id="option-job-2" name="vehicle" value="">Peak</label><br>
+					</form>
+		        </div>
+
 		        <div class="sidebar-box bg-white p-4 ftco-animate">
 		        	<h3 class="heading-sidebar">Browse Category</h3>
 		        	<form action="#" class="search-form mb-3">
@@ -132,6 +143,7 @@ function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospit
 							  
 							</form>
 		        </div>
+
 
 		        <div class="sidebar-box bg-white p-4 ftco-animate">
 		        	<h3 class="heading-sidebar">Select Location</h3>

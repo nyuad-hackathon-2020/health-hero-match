@@ -29,9 +29,7 @@ namespace H2M.Controllers
         {
             using (var db=new H2MDbContext())
             {
-
                 return db.Country.ToList();
-                
             }
         }
         [Route("~/NewDemand")]

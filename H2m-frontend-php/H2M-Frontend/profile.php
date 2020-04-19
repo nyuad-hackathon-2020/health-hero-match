@@ -22,7 +22,7 @@ if(isset($_POST['closeRequest'])){
 }
 
 
-$data = getRequest($profile . "2");
+$data = getRequest($profile . $userId);
 
 $userInfo = $data['userInfo'];
 $name = $userInfo["name"];
