@@ -10,17 +10,16 @@ if(isset($_GET['UserId'])){
     if($requestInfo->code==208){
         $color="danger";
         $head="You've already applied here";
-        $body="Continue to apply apply for more hospitals.";
+        $body="Continue to apply for more hospitals.";
     }
 }
 
 Head();
 
-Navbar();
 
 ?>
 <!-- write your html here -->
-<div class="hero-wrap hero-wrap-2 fixed-top" style="background-image: url(&quot;images/bg_1.jpg&quot;); background-position: 50% 0%;" data-stellar-background-ratio="0.5">
+<div class="hero-wrap hero-wrap-2 fixed-top" data-stellar-background-ratio="0.5">
       <div class="overlay position-fixed"></div>
       <div class="container">
         <div class="row no-gutters slider-text align-items-end justify-content-start">
@@ -47,6 +46,5 @@ Navbar();
 
 <?php
     Hotels();
-    Footer();
     Scripts();
 ?>

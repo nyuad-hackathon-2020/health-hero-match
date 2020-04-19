@@ -101,10 +101,12 @@ namespace H2M.Controllers
 
                 var specialtiesList = db.DoctorSpeciality.Where(a => a.DoctorId == userId).Select(a => a.Speciality.Name).ToList();
 
-                var requests = db.EmployeeRequest.Where(a => a.UserId == userInfo.Id).Select( a => new { a.Status, a.Request.Hospital, a.Time}).ToList();
+                var requests = db.EmployeeRequest.Where(a => a.UserId == userInfo.Id).Select( a => new { a.Status, a.Request.Hospital.IdNavigation.Name, a.Time}).ToList();
                 requests.Reverse();
 
-                return new { userInfo, specialtiesList, requests };
+                return new { 
+                    userInfo, specialtiesList, requests
+                };
             }
         }
 
@@ -152,6 +154,59 @@ namespace H2M.Controllers
                     }
                     db.SaveChanges();
                     return new Response() { Code = (int)HttpStatusCode.OK, Data = new { userInfo.Name, userInfo.Email, msg } };
+                }
+            }
+        }
+                
+        
+        [Route("~/CancelHospitalRequest")]
+        [HttpGet]
+        public dynamic CancelHospitalRequest(int requestId)
+        {
+            using (var db = new H2MDbContext())
+            {
+                var employeeRequest = db.HostpitalRequest.Include(a => a.Enabled).Where(a => a.Id == requestId).FirstOrDefault();
+
+                if (employeeRequest == null)
+                {
+                    return new Response()
+                    {
+                        Code = (int)HttpStatusCode.NotFound,
+                        Data = "Invalid Request"
+                    };
+                }
+                else
+                {
+                    employeeRequest.Enabled = false;
+                    string msg = "Canelled Successfully!";
+                    db.SaveChanges();
+                    return new Response() { Code = (int)HttpStatusCode.OK, Data = new { msg } };
+                }
+            }
+        }
+
+
+        [Route("~/CancelDoctorRequest")]
+        [HttpGet]
+        public dynamic CancelDoctorRequest(int requestId)
+        {
+            using (var db = new H2MDbContext())
+            {
+                var employeeRequest = db.EmployeeRequest.Include(a => a.Status).Where(a => a.Id == requestId).FirstOrDefault();
+                if (employeeRequest == null)
+                {
+                    return new Response()
+                    {
+                        Code = (int)HttpStatusCode.NotFound,
+                        Data = "Invalid Request"
+                    };
+                }
+                else
+                {
+                    employeeRequest.Status = -1;
+                    string msg = "Canelled Successfully!";
+                    db.SaveChanges();
+                    return new Response() { Code = (int)HttpStatusCode.OK, Data = new { msg } };
                 }
             }
         }

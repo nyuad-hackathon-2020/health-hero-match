@@ -71,8 +71,10 @@ function ApplicationPost($speciality,$hospitalName,$count,$country,$city,$hospit
 				<div class="row">
 					<div class="col-lg-9 pr-lg-4">
 						<div class="row">
-                    <?php 
-                    $resp=file_get_contents("http://localhost:57984/GetRequestsSorted?lon=-74.007081&lat=40.750385&docID=".$userId);
+					<?php 
+					//24.495970, 54.383114
+					//lon=-74.007081&lat=40.750385&docID=
+                    $resp=file_get_contents("http://localhost:57984/GetRequestsSorted?lon=54.383114&lat=24.495970&docID=".$userId);
                     $response=json_decode($resp);
                     $posts=$response->data;
                     foreach ($posts as $data) {

@@ -4,6 +4,8 @@
     $profile = $baseURL ."MyProfile?userId=";
     $Peak = $baseURL ."Peak?";
     $AcceptReject = $baseURL . "AcceptRejectApplications?";
+    $CancelHospitalRequest = $baseURL . "CancelHospitalRequest?requestId=";
+    $CancelDoctorRequest = $baseURL . "CancelDoctorRequest?requestId=";
 
 
 
