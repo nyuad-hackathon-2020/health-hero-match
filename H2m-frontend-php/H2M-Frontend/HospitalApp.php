@@ -32,17 +32,21 @@ $requestInfo=json_decode($resp);
 		    				<div class="team d-md-flex p-4 bg-white">
 		        			<div class="img" style="background-image: url(images/hospital-1.jpg);"></div>
 		        			<div class="text pl-md-4">
+                   <a href="http://maps.google.com/?q=<?php echo $requestInfo->latitude.",".$requestInfo->longitude?>" target="_blank" class="btn btn-info align-items-end float-right mt-2">Show on maps</a>
 		        				<span class="location mb-0"><?php echo $_GET['hospitalCityCountry'] ?></span>
 		        				<h2><?php echo $requestInfo->hospitalName ?></h2>
 			        			<span class="position"><?php echo $requestInfo->specialityName ?></span>
                                 <p class="mb-2"><?php echo ( $requestInfo->htmlpost );?></p>
                                 <div>
                                     <form action="Apply.php" method="GET">
-                                    <button type="submit" class="btn btn-primary float-right">
+                                    <button type="submit" class="btn btn-primary float-right px-4">
                                         Apply
                                     </button>
                                     <input type="hidden" name="HospitalRequestId" value="<?php echo $_GET["hospitalApp"] ?>">
                                     <input type="hidden" name="UserId" value="<?php echo $userId ?>">
+                                    <button type="submit" class="btn btn-light float-right mr-3">
+                                        Nearby Hotels
+                                    </button>
                                 </form>
                                 </div>
 		        			</div>

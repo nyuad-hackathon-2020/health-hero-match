@@ -88,7 +88,7 @@ namespace H2M.Controllers
         {
             using (var db = new H2MDbContext())
             {
-                return db.HostpitalRequest.Where(a=>a.Id==RequestId&&a.Enabled).Select(a=>new { a.Count,a.Htmlpost,HospitalName=a.Hospital.IdNavigation.Name,SpecialityName=a.Speciality.Name,email=a.Hospital.IdNavigation.Email }).FirstOrDefault();
+                return db.HostpitalRequest.Where(a=>a.Id==RequestId&&a.Enabled).Select(a=>new { a.Count,a.Htmlpost,HospitalName=a.Hospital.IdNavigation.Name,SpecialityName=a.Speciality.Name,email=a.Hospital.IdNavigation.Email,a.Hospital.IdNavigation.Latitude,a.Hospital.IdNavigation.Longitude }).FirstOrDefault();
             }
         }
         [Route("~/MyProfile")]

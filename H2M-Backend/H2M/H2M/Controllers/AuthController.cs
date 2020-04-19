@@ -154,7 +154,8 @@ namespace H2M.Controllers
                 //var spec = db.Doctor.Include(u => u.DoctorSpeciality).Where(d => d.DoctorId);
                 var employeeRequested = db.EmployeeRequest.Where(a => a.UserId == docID).Select(a => a.RequestId).ToList();
 
-                var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(a => a.Hospital.IdNavigation).Include(a => a.Hospital.IdNavigation.City).Include(a => a.Hospital.IdNavigation.Country).Include(h => h.Speciality).ToList();
+                var _hospitals = db.HostpitalRequest.Include(h => h.Hospital).Include(a => a.Hospital.IdNavigation).Include(a => a.Hospital.IdNavigation.City).Include(a => a.Hospital.IdNavigation.Country).Include(h => h.Speciality).Where(a=>a.Enabled).ToList();
+                //added where to only show enabled requests
                 List<RequestViewModel> result = new List<RequestViewModel>();
                 User user = null;
                 if (lon == null || lat == null)
