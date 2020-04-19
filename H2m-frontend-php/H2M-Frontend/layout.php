@@ -255,4 +255,77 @@ function Scripts(){
 </html>
     <?php 
 }
+function Hotel($location,$hotelName,$link,$id){
+  ?>
+       <div class="col-md-12">
+                    <div class="team d-md-flex p-4 bg-white">
+                      <div
+                        class="img hotel-img-size mb-0"
+                        style="
+                          background-image: url(images/hotel-<?php echo $id?>.jpg);
+                        "
+                      >
+                      </div>
+                       <div class="text pl-md-4">
+                        <span class="location mb-0"><?php echo $location ?></span>
+                        <h2><?php echo $hotelName ?>
+                                  <a class="btn btn-info float-right" target="_blank" href="<?php echo $link ?>">More info</a></h2>
+                     </div>
+                    </div>
+                    </div>
+  <?php
+}
+function Hotels(){
+  ?>
+   <!-- Modal -->
+   <div
+    class="modal fade"
+    id="NearbyHotels"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Nearby Hotels</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <section
+            class="ftco-section ftco-candidates ftco-candidates-2 py-2 bg-light"
+          >
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="row">
+                      <?php Hotel("Abu Dhabi , UAE","Four Seasons Hotel","https://www.booking.com/hotel/ae/four-seasons-abu-dhabi-at-al-maryah-island.html",1);
+                    ?>
+                     <?php Hotel("Abu Dhabi , UAE","Corniche Hotel Abu Dhabi","https://www.booking.com/hotel/ae/corniche-hotel-abu-dhabi.html",2);
+                    ?>
+                    <?php Hotel("Abu Dhabi , UAE","Ivory Hotel Apartments ","https://www.booking.com/hotel/ae/ivory-apartments.html",3);
+                    ?>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <button type="button" class="btn btn-secondary float-right mt-4" data-dismiss="modal">
+          Close
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php
+}
 ?>
