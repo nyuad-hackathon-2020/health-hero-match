@@ -40,15 +40,15 @@ $requests = "";
 foreach($data['requests'] as $request){
     $status = $request['status'];
     if($status == 1){
-        $status = '<span class="btn btn-done">Accepted</span>';
+        $status = '<span class="btn btn-done btn-block">Accepted</span>';
         $cancel = "";
     }
     else if($status == -1){
-        $status = '<span class="btn btn-cancelled">Declined</span>';
+        $status = '<span class="btn btn-cancelled btn-block">Declined</span>';
         $cancel = "";
     }
     else{
-        $status = '<span class="btn btn-pending">Pending</span>';
+        $status = '<span class="btn btn-pending btn-block">Pending</span>';
         $cancel = '<input type="submit" name="closeRequest" value="Cancel" class="btn btn-cancle">';
     }
     $timestamp = strtotime($request['time']);
@@ -87,41 +87,44 @@ foreach($data['requests'] as $request){
                         </div>
                     </div>
                 </div>
+                <div class="col-md-12">
+                <div class="table profile" style="padding: 50px;background: #fff;">
+
+<div class="table100 ver1 m-b-110">
+    <div class="table100-head">
+        <table>
+            <thead>
+                <tr class="row100 head" style="Background: linear-gradient(to right, #1274fe 0%, #384e9f 100%);">
+                    <th class="cell100 column5">ID</th>
+                    <th class="cell100 column1">Hospital name</th>
+                    <th class="cell100 column5">Type</th>
+                    <th class="cell100 column5">Time</th>
+                    <th class="cell100 column5">Status</th>
+                    <th class="cell100 column5">Cancle</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="table100-body js-pscroll ps ps--active-y">
+        <table>
+            <tbody>
+                <?php echo $requests ?>
+            </tbody>
+        </table>
+        <div class="ps__rail-x" style="left: 0px; bottom: -374.4px;">
+            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 374.4px; height: 585px; right: 5px;">
+            <div class="ps__thumb-y" tabindex="0" style="top: 188px; height: 294px;"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
             </div>
 
-            <div class="table profile" style="padding: 50px;background: #fff;">
-
-                <div class="table100 ver1 m-b-110">
-                    <div class="table100-head">
-                        <table>
-                            <thead>
-                                <tr class="row100 head" style="Background: linear-gradient(to right, #1274fe 0%, #384e9f 100%);">
-                                    <th class="cell100 column5">ID</th>
-                                    <th class="cell100 column1">Hospital name</th>
-                                    <th class="cell100 column5">Type</th>
-                                    <th class="cell100 column5">Time</th>
-                                    <th class="cell100 column5">Status</th>
-                                    <th class="cell100 column5">Cancle</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <div class="table100-body js-pscroll ps ps--active-y">
-                        <table>
-                            <tbody>
-                                <?php echo $requests ?>
-                            </tbody>
-                        </table>
-                        <div class="ps__rail-x" style="left: 0px; bottom: -374.4px;">
-                            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-                        </div>
-                        <div class="ps__rail-y" style="top: 374.4px; height: 585px; right: 5px;">
-                            <div class="ps__thumb-y" tabindex="0" style="top: 188px; height: 294px;"></div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+           
 
         </div>
     </div>

@@ -328,4 +328,78 @@ function Hotels(){
   </div>
   <?php
 }
+function Contact(){
+  ?>
+   <!-- Modal -->
+   <div
+    class="modal fade"
+    id="Contact"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Nearby Hotels</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <section
+            class="ftco-section ftco-candidates ftco-candidates-2 py-2 bg-light"
+          >
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="row">
+                  <div class="col-md-12">
+                    <div class="team d-md-flex p-4 bg-white">
+                      <div
+                        class="img hotel-img-size mb-0"
+                        style="
+                          background-image: url(images/person_1.jpg);
+                        "
+                      >
+                      </div>
+                       <div class="text pl-md-4">
+                        <span class="location mb-0">Dubai , UAE</span>
+                        <h2>Amr Darawsheh 
+                                  <a class="btn btn-info float-right" target="_blank" href="profile.php">Show Profile</a></h2>
+                                  <span class="position">+971 2 9832125</span>
+                                  <span class="position" style="text-transform: lowercase;">amr.1999@live.com </span>   
+                        <div class="mt-3">
+                        <h2>Contact Amr Darawsheh by sending an email:</h2>
+                        <textarea name="editor" ></textarea>
+                        <button type="button" class="btn btn-info float-right mt-4">
+                            Send
+                          </button>
+                        </div>
+                     </div>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <button type="button" class="btn btn-secondary float-right mt-4" data-dismiss="modal">
+          Close
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+   CKEDITOR.replace( 'editor' );
+  </script>
+  <?php
+}
 ?>

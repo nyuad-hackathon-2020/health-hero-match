@@ -206,12 +206,18 @@ namespace H2M.Controllers
                     List<int> leftPos = new List<int>();
                     foreach(var r in requests)
                     {
-                        var requestLeft = db.EmployeeRequest.Select(a => a.RequestId == r.Id && a.Status == 1).ToList().Count;
+                        var requestLeft = db.EmployeeRequest.Where(a => a.RequestId == r.Id && a.Status == 1).ToList().Count;
                         leftPos.Add(requestLeft);
                         ids.Add(r.Id);
                     }
-
-                    var newRequests = db.EmployeeRequest.Where(r => ids.Contains(r.RequestId)).Select(r => new { r.User, r.Status, r.Time, r.Request.Speciality, r.Id}).ToList();
+                    /*
+                     'id' => $request['id'],
+            'userName' => $request['user']['name'],
+            'status' => $request['status'],
+            'time' => $new_date,
+            'speciality' => $request['speciality']['name']
+                     */
+                    var newRequests = db.EmployeeRequest.Where(r => ids.Contains(r.RequestId)).Select(r => new { User=new {r.User.Name}, r.Status, r.Time, Speciality=new { r.Request.Speciality.Name }, r.Id,r.RequestId}).ToList();
 
                     newRequests.Reverse();
                     requests.Reverse();

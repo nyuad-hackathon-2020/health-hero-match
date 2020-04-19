@@ -26,7 +26,7 @@ if(isset($_POST['HospitalId'])){
     
     $color="primary";
     $head="Well done!";
-    $body="You have applied successfully!";
+    $body="You created a demand successfully!";
     if($requestInfo->code!=200){
         $color="danger";
         $head="Something went wrong";

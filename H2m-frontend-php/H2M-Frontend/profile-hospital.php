@@ -16,7 +16,7 @@ if(isset($_POST['acceptRequest'])){
     $requestId = $_POST['requestId'];
     $data = getRequest($AcceptReject."EmployeeRequestId=$requestId"."&AcceptOrDecline=True");
     $message = '
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-success text-dark" role="alert">
       '.$data['data']['msg'].'
     </div>
     ';
@@ -67,7 +67,7 @@ if($data['code'] == 200){
         <div style="float: right;" class="col-md-4">
             <div class="alert alert-danger">
                 <div class="container">
-                    <b>Peak Alert:</b> Damn man! Seems your area is having a PEAK !
+                <b>Surge Alert:</b> Your area is currently experiencing a surge of cases!
                 </div>
             </div>
         </div>';
@@ -76,7 +76,7 @@ if($data['code'] == 200){
 
     }
 
-    $i = 0;
+    $i = count($data['leftPos'])-1;
     foreach($data["requests"] as $request){
         $myRequests[] = array(
             'id' => $request['id'],
@@ -85,6 +85,7 @@ if($data['code'] == 200){
             'count' => $request['count'],
             'left' => $data['leftPos'][$i]
         );
+        $i--;
     }
 
     foreach($data["newRequests"] as $request){
@@ -95,7 +96,8 @@ if($data['code'] == 200){
             'userName' => $request['user']['name'],
             'status' => $request['status'],
             'time' => $new_date,
-            'speciality' => $request['speciality']['name']
+            'speciality' => $request['speciality']['name'],
+            'requestId' => $request['requestId']
         );
     }
 
@@ -105,15 +107,17 @@ else{
 }
 
 $myReqs = "";
-
+$color="";
 foreach($myRequests as $request){
     if($request['enabled'] == 1){
         $enabled = "Waiting";
         $clooose = "<input type='submit' name='closeRequest' value='Close' class='btn-cancle'>";
+        $color="pending";
     }
     else{
         $enabled = "Completed";
         $clooose = "";
+        $color="done";
     }
     $myReqs .= '
     <form method="post">
@@ -122,7 +126,7 @@ foreach($myRequests as $request){
             <td class="cell100 column5">'.$request["speciality"].'</td>
             <td class="cell100 column5">'.$request["count"].'</td>
             <td class="cell100 column5">'.$request["left"].'</td>
-            <td class="cell100 column5"> <span class="btn-pending">'.$enabled.'</span></td>
+            <td class="cell100 column5"> <span class="btn btn-'.$color.' btn-block">'.$enabled.'</span></td>
             <td class="cell100 column5"><form method="post"><input hidden name="requestId" value="'.$request["id"].'"> '.$clooose.'</form></td>
         </tr>
         </form>
@@ -132,10 +136,10 @@ foreach($myRequests as $request){
 $newReqs = "";
 foreach($newRequests as $request){
     if($request['status'] == 0){
-        $status = '<input type="submit" class="btn btn-success" value="Accept" name="acceptRequest"> <input type="submit" class="btn btn-danger" value="Reject" name="rejectRequest">';
+        $status = '<input type="submit" class="btn btn-success mr-3 px-3 float-left" value="✔" name="acceptRequest"> <input type="submit" class="btn btn-danger float-right" value="❌" name="rejectRequest">';
     }
     else{
-        $status = "<span class='btn btn-success'>Accepted</span>";
+        $status = "<span class='btn btn-success btn-block'>Accepted</span>";
     }
     $newReqs .= '
     <form method="post">
@@ -144,7 +148,12 @@ foreach($newRequests as $request){
             <td class="cell100 column5">'.$request["userName"].'</td>
             <td class="cell100 column5">'.$request["speciality"].'</td>
             <td class="cell100 column5">'.$request["time"].'</td>
-            <td class="cell100 column5"><form method="post"><input hidden value="'.$request["id"].'" name="requestId">'.$status.'</div></td>
+            <td class="cell100 column5">'.$request["requestId"].'</td>
+            <td class="cell100 column5 text-center"><form method="post"><input hidden value="'.$request["id"].'" name="requestId">'.$status.'</div></td>
+            <td class="cell100 column5"> <button type="button" id="showModal" class="btn btn-light float-right mr-3" data-toggle="modal" data-target="#Contact">
+            Contanct
+        </button></td>
+
         </tr>
     </form>
     ';
@@ -252,7 +261,9 @@ foreach($newRequests as $request){
                                                 <th class="cell100 column5">Name</th>
                                                 <th class="cell100 column5">Type</th>
                                                 <th class="cell100 column5">Time</th>
+                                                <th class="cell100 column5">RequestId</th>
                                                 <th class="cell100 column5">Status</th>
+                                                <th class="cell100 column5">Contact</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -302,6 +313,7 @@ foreach($newRequests as $request){
     <script src="js/table.js"></script>
 
     <?php
+    Contact();
     Footer();
     Scripts();
 ?>

@@ -205,8 +205,8 @@ namespace H2M.Controllers
                 }
                 else
                 {
-                    employeeRequest.Status = -1;
-                    string msg = "Canelled Successfully!";
+                    db.EmployeeRequest.Remove(employeeRequest);
+                    string msg = "Cancelled Successfully!";
                     db.SaveChanges();
                     return new Response() { Code = (int)HttpStatusCode.OK, Data = new { msg } };
                 }
